@@ -1,0 +1,882 @@
+consumes:
+- application/json
+definitions:
+  model.CommentCreateRequest:
+    properties:
+      message:
+        type: string
+    type: object
+  model.CommentCreateResponse:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: string
+      message:
+        type: string
+      photo_id:
+        type: string
+      user_id:
+        type: string
+    type: object
+  model.CommentResponse:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: string
+      message:
+        type: string
+      photo_id:
+        type: string
+      updated_at:
+        type: string
+      user_id:
+        type: string
+    type: object
+  model.CommentUpdateRequest:
+    properties:
+      message:
+        type: string
+    type: object
+  model.CommentUpdateResponse:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: string
+      message:
+        type: string
+      photo_id:
+        type: string
+      updated_at:
+        type: string
+      user_id:
+        type: string
+    type: object
+  model.DeleteCommentResponse:
+    properties:
+      message:
+        type: string
+    type: object
+  model.DeletePhotoResponse:
+    properties:
+      message:
+        type: string
+    type: object
+  model.DeleteSocialMediaResponse:
+    properties:
+      message:
+        type: string
+    type: object
+  model.MyError:
+    properties:
+      error:
+        type: string
+    type: object
+  model.PhotoCreateRequest:
+    properties:
+      caption:
+        type: string
+      photo_url:
+        type: string
+      title:
+        type: string
+    type: object
+  model.PhotoCreateResponse:
+    properties:
+      caption:
+        type: string
+      created_at:
+        type: string
+      id:
+        type: string
+      photo_url:
+        type: string
+      title:
+        type: string
+      user_id:
+        type: string
+    type: object
+  model.PhotoResponse:
+    properties:
+      caption:
+        type: string
+      created_at:
+        type: string
+      id:
+        type: string
+      photo_url:
+        type: string
+      title:
+        type: string
+      updated_at:
+        type: string
+      user_id:
+        type: string
+    type: object
+  model.PhotoUpdateRequest:
+    properties:
+      caption:
+        type: string
+      photo_url:
+        type: string
+      title:
+        type: string
+    type: object
+  model.PhotoUpdateResponse:
+    properties:
+      caption:
+        type: string
+      created_at:
+        type: string
+      id:
+        type: string
+      photo_url:
+        type: string
+      title:
+        type: string
+      updated_at:
+        type: string
+      user_id:
+        type: string
+    type: object
+  model.SocialMediaCreateRequest:
+    properties:
+      name:
+        type: string
+      social_media_url:
+        type: string
+    type: object
+  model.SocialMediaCreateResponse:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      social_media_url:
+        type: string
+      user_id:
+        type: string
+    type: object
+  model.SocialMediaResponse:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      social_media_url:
+        type: string
+      updated_at:
+        type: string
+      user_id:
+        type: string
+    type: object
+  model.SocialMediaUpdateRequest:
+    properties:
+      name:
+        type: string
+      social_media_url:
+        type: string
+    type: object
+  model.SocialMediaUpdateResponse:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      social_media_url:
+        type: string
+      updated_at:
+        type: string
+      user_id:
+        type: string
+    type: object
+  model.UserLoginRequest:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  model.UserLoginResponse:
+    properties:
+      token:
+        type: string
+    type: object
+  model.UserRegisterRequest:
+    properties:
+      age:
+        type: integer
+      email:
+        type: string
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  model.UserRegisterResponse:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: string
+      updated_at:
+        type: string
+      username:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: Final Project for Scalable Web Service with Golang - Batch 1, DTS-FGA.
+  title: Mygram API
+  version: "1.0"
+paths:
+  /auth/login:
+    post:
+      consumes:
+      - application/json
+      description: Sign in for user.
+      parameters:
+      - description: User request is required
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/model.UserLoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.UserLoginResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.MyError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/model.MyError'
+      summary: Login User
+      tags:
+      - User
+  /auth/register:
+    post:
+      consumes:
+      - application/json
+      description: Sign up for user.
+      parameters:
+      - description: User request is required
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/model.UserRegisterRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/model.UserRegisterResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.MyError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/model.MyError'
+      summary: Register User
+      tags:
+      - User
+  /comment:
+    get:
+      consumes:
+      - application/json
+      description: View all comment
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.CommentResponse'
+            type: array
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/model.MyError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/model.MyError'
+      security:
+      - Bearer: []
+      summary: Get all comment
+      tags:
+      - Comment
+  /comment/:id:
+    delete:
+      consumes:
+      - application/json
+      description: Delete comment
+      parameters:
+      - description: Comment ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.DeleteCommentResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.MyError'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/model.MyError'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/model.MyError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/model.MyError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/model.MyError'
+      security:
+      - Bearer: []
+      summary: Delete comment
+      tags:
+      - Comment
+    get:
+      consumes:
+      - application/json
+      description: View specific comment by ID
+      parameters:
+      - description: Comment ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.CommentResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/model.MyError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/model.MyError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/model.MyError'
+      security:
+      - Bearer: []
+      summary: Get comment by ID
+      tags:
+      - Comment
+    put:
+      consumes:
+      - application/json
+      description: Update specific comment
+      parameters:
+      - description: Comment ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Comment request is required
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/model.CommentUpdateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.CommentUpdateResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.MyError'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/model.MyError'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/model.MyError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/model.MyError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/model.MyError'
+      security:
+      - Bearer: []
+      summary: Update comment
+      tags:
+      - Comment
+  /comment/:photo_id:
+    post:
+      consumes:
+      - application/json
+      description: Add new comment
+      parameters:
+      - description: Photo ID
+        in: path
+        name: photo_id
+        required: true
+        type: string
+      - description: Comment request is required
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/model.CommentCreateRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/model.CommentCreateResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.MyError'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/model.MyError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/model.MyError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/model.MyError'
+      security:
+      - Bearer: []
+      summary: Create comment
+      tags:
+      - Comment
+  /photo:
+    get:
+      consumes:
+      - application/json
+      description: Get All Photo.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.PhotoResponse'
+            type: array
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/model.MyError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/model.MyError'
+      security:
+      - Bearer: []
+      summary: Get All Photo
+      tags:
+      - Photo
+    post:
+      consumes:
+      - application/json
+      description: Add new Photo
+      parameters:
+      - description: Photo request is required
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/model.PhotoCreateRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/model.PhotoCreateResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.MyError'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/model.MyError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/model.MyError'
+      security:
+      - Bearer: []
+      summary: Create Photo
+      tags:
+      - Photo
+  /photo/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete photo for specific Photo ID.
+      parameters:
+      - description: Photo ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.DeletePhotoResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.MyError'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/model.MyError'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/model.MyError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/model.MyError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/model.MyError'
+      security:
+      - Bearer: []
+      summary: Delete Photo
+      tags:
+      - Photo
+    get:
+      consumes:
+      - application/json
+      description: Get specific Photo by ID.
+      parameters:
+      - description: Photo ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.PhotoResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/model.MyError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/model.MyError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/model.MyError'
+      security:
+      - Bearer: []
+      summary: Get Photo by ID.
+      tags:
+      - Photo
+    put:
+      consumes:
+      - application/json
+      description: Update photo for specific Photo ID.
+      parameters:
+      - description: Photo ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Photo request is required
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/model.PhotoUpdateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.PhotoUpdateResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.MyError'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/model.MyError'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/model.MyError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/model.MyError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/model.MyError'
+      security:
+      - Bearer: []
+      summary: Update Photo
+      tags:
+      - Photo
+  /social_media:
+    get:
+      consumes:
+      - application/json
+      description: Get All Social Media.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.SocialMediaResponse'
+            type: array
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/model.MyError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/model.MyError'
+      security:
+      - Bearer: []
+      summary: Get All Social Media
+      tags:
+      - Social Media
+    post:
+      consumes:
+      - application/json
+      description: Add new Social Media
+      parameters:
+      - description: Social Media request is required
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/model.SocialMediaCreateRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/model.SocialMediaCreateResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.MyError'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/model.MyError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/model.MyError'
+      security:
+      - Bearer: []
+      summary: Create Social Media
+      tags:
+      - Social Media
+  /social_media/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete Social Media for specific Social Media ID.
+      parameters:
+      - description: Social Media ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.DeleteSocialMediaResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.MyError'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/model.MyError'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/model.MyError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/model.MyError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/model.MyError'
+      security:
+      - Bearer: []
+      summary: Delete Social Media
+      tags:
+      - Social Media
+    get:
+      consumes:
+      - application/json
+      description: Get specific Social Media by ID.
+      parameters:
+      - description: Social Media ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.SocialMediaResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/model.MyError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/model.MyError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/model.MyError'
+      security:
+      - Bearer: []
+      summary: Get Social Media by ID.
+      tags:
+      - Social Media
+    put:
+      consumes:
+      - application/json
+      description: Update Social Media for specific Social Media ID.
+      parameters:
+      - description: Social Media ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Social Media request is required
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/model.SocialMediaUpdateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.SocialMediaUpdateResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.MyError'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/model.MyError'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/model.MyError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/model.MyError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/model.MyError'
+      security:
+      - Bearer: []
+      summary: Update Social Media
+      tags:
+      - Social Media
+produces:
+- application/json
+schemes:
+- http
+securityDefinitions:
+  Bearer:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
