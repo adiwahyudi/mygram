@@ -16,14 +16,14 @@ import (
 // @title							Mygram API
 // @version							1.0
 // @description						Final Project for Scalable Web Service with Golang - Batch 1, DTS-FGA.
-// @schemes							http
-// @host							localhost:8080
+// @schemes							https
+// @host							https://mygram-api.up.railway.app
+// @BasePath  						/api/v1
 // @accept							json
 // @produce							json
 // @securityDefinitions.apikey		Bearer
 // @in								header
 // @name							Authorization
-// @BasePath						/api/v1
 func main() {
 	g := gin.Default()
 

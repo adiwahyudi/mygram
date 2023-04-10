@@ -19,33 +19,42 @@ func NewSocialMediaController(socialMediaService service.SocialMediaService) *So
 	}
 }
 
-// GetList godoc
+// GetListSocialMedias godoc
 //
 //	@Summary		Get All Social Media
 //	@Description	Get All Social Media.
 //	@Tags			Social Media
 //	@Accept			json
 //	@Produce		json
-//	@Success		200		{array}		model.SocialMediaResponse
-//	@Failure		401		{object}	model.MyError
-//	@Failure		500		{object}	model.MyError
+//	@Success		200		{object}		model.ResponseSuccess
+//	@Failure		401		{object}	model.ResponseFailed
+//	@Failure		500		{object}	model.ResponseFailed
 //	@Security		Bearer
 //	@Router			/social_media [get]
-func (smc *SocialMediaController) GetList(ctx *gin.Context) {
+func (smc *SocialMediaController) GetListSocialMedias(ctx *gin.Context) {
 	socialMedias, err := smc.SocialMediaService.GetAll()
-
 	if err != nil {
-		ctx.AbortWithStatusJSON(http.StatusInternalServerError, model.MyError{
-			Err: err.Error(),
+		ctx.AbortWithStatusJSON(http.StatusInternalServerError, model.ResponseFailed{
+			Meta: model.Meta{
+				Code:    http.StatusInternalServerError,
+				Message: http.StatusText(http.StatusInternalServerError),
+			},
+			Error: err.Error(),
 		})
 		return
 	}
 
-	ctx.JSON(http.StatusOK, socialMedias)
+	ctx.JSON(http.StatusOK, model.ResponseSuccess{
+		Meta: model.Meta{
+			Code:    http.StatusOK,
+			Message: http.StatusText(http.StatusOK),
+		},
+		Data: socialMedias,
+	})
 	return
 }
 
-// GetByID godoc
+// GetOneSocialMediaByID godoc
 //
 //	@Summary		Get Social Media by ID.
 //	@Description	Get specific Social Media by ID.
@@ -53,35 +62,48 @@ func (smc *SocialMediaController) GetList(ctx *gin.Context) {
 //	@Accept			json
 //	@Produce		json
 //	@Param			id	path		string	true	"Social Media ID"
-//	@Success		200		{object}	model.SocialMediaResponse
-//	@Failure		401		{object}	model.MyError
-//	@Failure		404		{object}	model.MyError
-//	@Failure		500		{object}	model.MyError
+//	@Success		200		{object}	model.ResponseSuccess
+//	@Failure		401		{object}	model.ResponseFailed
+//	@Failure		404		{object}	model.ResponseFailed
+//	@Failure		500		{object}	model.ResponseFailed
 //	@Security		Bearer
 //	@Router			/social_media/{id} [get]
-func (smc *SocialMediaController) GetByID(ctx *gin.Context) {
+func (smc *SocialMediaController) GetOneSocialMediaByID(ctx *gin.Context) {
 	id := ctx.Param("id")
-	res, err := smc.SocialMediaService.GetById(id)
+	socialMedia, err := smc.SocialMediaService.GetById(id)
 
 	if err != nil {
-		if err != model.ErrorNotFound {
-			ctx.AbortWithStatusJSON(http.StatusInternalServerError, model.MyError{
-				Err: err.Error(),
+		if err == model.ErrorNotFound {
+			ctx.AbortWithStatusJSON(http.StatusNotFound, model.ResponseFailed{
+				Meta: model.Meta{
+					Code:    http.StatusNotFound,
+					Message: http.StatusText(http.StatusNotFound),
+				},
+				Error: err.Error(),
 			})
 			return
 		}
-		ctx.AbortWithStatusJSON(http.StatusNotFound, model.MyError{
-			Err: model.ErrorNotFound.Err,
+		ctx.AbortWithStatusJSON(http.StatusInternalServerError, model.ResponseFailed{
+			Meta: model.Meta{
+				Code:    http.StatusInternalServerError,
+				Message: http.StatusText(http.StatusInternalServerError),
+			},
+			Error: err.Error(),
 		})
 		return
 	}
 
-	ctx.JSON(http.StatusOK, res)
+	ctx.JSON(http.StatusOK, model.ResponseSuccess{
+		Meta: model.Meta{
+			Code:    http.StatusOK,
+			Message: http.StatusText(http.StatusOK),
+		},
+		Data: socialMedia,
+	})
 	return
-
 }
 
-// Create godoc
+// CreateSocialMedia godoc
 //
 //	@Summary		Create Social Media
 //	@Description	Add new Social Media
@@ -89,59 +111,84 @@ func (smc *SocialMediaController) GetByID(ctx *gin.Context) {
 //	@Accept			json
 //	@Produce		json
 //	@Param			request	body		model.SocialMediaCreateRequest	true	"Social Media request is required"
-//	@Success		201		{object}	model.SocialMediaCreateResponse
-//	@Failure		400		{object}	model.MyError
-//	@Failure		401		{object}	model.MyError
-//	@Failure		500		{object}	model.MyError
+//	@Success		201		{object}	model.ResponseSuccess
+//	@Failure		400		{object}	model.ResponseFailed
+//	@Failure		401		{object}	model.ResponseFailed
+//	@Failure		500		{object}	model.ResponseFailed
 //	@Security		Bearer
 //	@Router			/social_media [post]
-func (smc *SocialMediaController) Create(ctx *gin.Context) {
+func (smc *SocialMediaController) CreateSocialMedia(ctx *gin.Context) {
 	newSocialMedia := model.SocialMediaCreateRequest{}
 
 	if err := ctx.ShouldBindJSON(&newSocialMedia); err != nil {
-		ctx.AbortWithStatusJSON(http.StatusBadRequest, model.MyError{
-			Err: err.Error(),
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, model.ResponseFailed{
+			Meta: model.Meta{
+				Code:    http.StatusBadRequest,
+				Message: http.StatusText(http.StatusBadRequest),
+			},
+			Error: err.Error(),
 		})
 		return
 	}
 	valid, err := valid.ValidateStruct(newSocialMedia)
 
 	if err != nil {
-		ctx.AbortWithStatusJSON(http.StatusBadRequest, model.MyError{
-			Err: err.Error(),
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, model.ResponseFailed{
+			Meta: model.Meta{
+				Code:    http.StatusBadRequest,
+				Message: http.StatusText(http.StatusBadRequest),
+			},
+			Error: err.Error(),
 		})
 		return
 	}
 
 	if !valid {
-		ctx.AbortWithStatusJSON(http.StatusBadRequest, model.MyError{
-			Err: err.Error(),
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, model.ResponseFailed{
+			Meta: model.Meta{
+				Code:    http.StatusBadRequest,
+				Message: http.StatusText(http.StatusBadRequest),
+			},
+			Error: err.Error(),
 		})
 		return
 	}
 
 	userId, isExist := ctx.Get("user_id")
 	if !isExist {
-		ctx.AbortWithStatusJSON(http.StatusInternalServerError, model.MyError{
-			Err: model.ErrorInvalidToken.Err,
+		ctx.AbortWithStatusJSON(http.StatusInternalServerError, model.ResponseFailed{
+			Meta: model.Meta{
+				Code:    http.StatusInternalServerError,
+				Message: http.StatusText(http.StatusInternalServerError),
+			},
+			Error: model.ErrorInvalidToken.Err,
 		})
 		return
 	}
 
 	res, err := smc.SocialMediaService.Add(newSocialMedia, userId.(string))
 	if err != nil {
-		ctx.AbortWithStatusJSON(http.StatusInternalServerError, model.MyError{
-			Err: err.Error(),
+		ctx.AbortWithStatusJSON(http.StatusInternalServerError, model.ResponseFailed{
+			Meta: model.Meta{
+				Code:    http.StatusInternalServerError,
+				Message: http.StatusText(http.StatusInternalServerError),
+			},
+			Error: err.Error(),
 		})
 		return
 	}
 
-	ctx.JSON(http.StatusCreated, res)
+	ctx.JSON(http.StatusCreated, model.ResponseSuccess{
+		Meta: model.Meta{
+			Code:    http.StatusCreated,
+			Message: http.StatusText(http.StatusCreated),
+		},
+		Data: res,
+	})
 	return
-
 }
 
-// Update godoc
+// UpdateSocialMedia godoc
 //
 //	@Summary		Update Social Media
 //	@Description	Update Social Media for specific Social Media ID.
@@ -150,44 +197,60 @@ func (smc *SocialMediaController) Create(ctx *gin.Context) {
 //	@Produce		json
 //	@Param			id	path		string	true	"Social Media ID"
 //	@Param			request	body		model.SocialMediaUpdateRequest	true	"Social Media request is required"
-//	@Success		200		{object}	model.SocialMediaUpdateResponse
-//	@Failure		400		{object}	model.MyError
-//	@Failure		401		{object}	model.MyError
-//	@Failure		403		{object}	model.MyError
-//	@Failure		404		{object}	model.MyError
-//	@Failure		500		{object}	model.MyError``
+//	@Success		200		{object}	model.ResponseSuccess
+//	@Failure		400		{object}	model.ResponseFailed
+//	@Failure		401		{object}	model.ResponseFailed
+//	@Failure		403		{object}	model.ResponseFailed
+//	@Failure		404		{object}	model.ResponseFailed
+//	@Failure		500		{object}	model.ResponseFailed
 //	@Security		Bearer
 //	@Router			/social_media/{id} [put]
-func (smc *SocialMediaController) Update(ctx *gin.Context) {
+func (smc *SocialMediaController) UpdateSocialMedia(ctx *gin.Context) {
 	updateSocialMedia := model.SocialMediaUpdateRequest{}
 	id := ctx.Param("id")
 
 	if err := ctx.ShouldBindJSON(&updateSocialMedia); err != nil {
-		ctx.AbortWithStatusJSON(http.StatusBadRequest, model.MyError{
-			Err: err.Error(),
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, model.ResponseFailed{
+			Meta: model.Meta{
+				Code:    http.StatusBadRequest,
+				Message: http.StatusText(http.StatusBadRequest),
+			},
+			Error: err.Error(),
 		})
 		return
 	}
 	valid, err := valid.ValidateStruct(updateSocialMedia)
 
 	if err != nil {
-		ctx.AbortWithStatusJSON(http.StatusBadRequest, model.MyError{
-			Err: err.Error(),
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, model.ResponseFailed{
+			Meta: model.Meta{
+				Code:    http.StatusBadRequest,
+				Message: http.StatusText(http.StatusBadRequest),
+			},
+			Error: err.Error(),
 		})
 		return
 	}
 
 	if !valid {
-		ctx.AbortWithStatusJSON(http.StatusBadRequest, model.MyError{
-			Err: err.Error(),
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, model.ResponseFailed{
+			Meta: model.Meta{
+				Code:    http.StatusBadRequest,
+				Message: http.StatusText(http.StatusBadRequest),
+			},
+			Error: err.Error(),
 		})
 		return
 	}
 
 	userId, isExist := ctx.Get("user_id")
 	if !isExist {
-		ctx.AbortWithStatusJSON(http.StatusInternalServerError, model.MyError{
-			Err: model.ErrorInvalidToken.Err,
+		ctx.AbortWithStatusJSON(http.StatusInternalServerError, model.ResponseFailed{
+			Meta: model.Meta{
+				Code:    http.StatusInternalServerError,
+				Message: http.StatusText(http.StatusInternalServerError),
+			},
+			Error: model.ErrorInvalidToken.Err,
 		})
 		return
 	}
@@ -195,26 +258,45 @@ func (smc *SocialMediaController) Update(ctx *gin.Context) {
 	res, err := smc.SocialMediaService.UpdateById(updateSocialMedia, id, userId.(string))
 	if err != nil {
 		if err == model.ErrorNotFound {
-			ctx.AbortWithStatusJSON(http.StatusNotFound, model.MyError{
-				Err: model.ErrorNotFound.Err,
+			ctx.AbortWithStatusJSON(http.StatusNotFound, model.ResponseFailed{
+				Meta: model.Meta{
+					Code:    http.StatusNotFound,
+					Message: http.StatusText(http.StatusNotFound),
+				},
+				Error: err.Error(),
 			})
 			return
+
 		} else if err == model.ErrorForbiddenAccess {
-			ctx.AbortWithStatusJSON(http.StatusForbidden, model.MyError{
-				Err: model.ErrorForbiddenAccess.Err,
+			ctx.AbortWithStatusJSON(http.StatusForbidden, model.ResponseFailed{
+				Meta: model.Meta{
+					Code:    http.StatusForbidden,
+					Message: http.StatusText(http.StatusForbidden),
+				},
+				Error: err.Error(),
 			})
 			return
 		}
-		ctx.AbortWithStatusJSON(http.StatusInternalServerError, model.MyError{
-			Err: err.Error(),
+		ctx.AbortWithStatusJSON(http.StatusInternalServerError, model.ResponseFailed{
+			Meta: model.Meta{
+				Code:    http.StatusInternalServerError,
+				Message: http.StatusText(http.StatusInternalServerError),
+			},
+			Error: err.Error(),
 		})
 		return
 	}
-	ctx.JSON(http.StatusOK, res)
+	ctx.JSON(http.StatusOK, model.ResponseSuccess{
+		Meta: model.Meta{
+			Code:    http.StatusOK,
+			Message: http.StatusText(http.StatusOK),
+		},
+		Data: res,
+	})
 	return
 }
 
-// Delete godoc
+// DeleteSocialMedia godoc
 //
 //	@Summary		Delete Social Media
 //	@Description	Delete Social Media for specific Social Media ID.
@@ -222,20 +304,24 @@ func (smc *SocialMediaController) Update(ctx *gin.Context) {
 //	@Accept			json
 //	@Produce		json
 //	@Param			id	path		string	true	"Social Media ID"
-//	@Success		200		{object}	model.DeleteSocialMediaResponse
-//	@Failure		400		{object}	model.MyError
-//	@Failure		401		{object}	model.MyError
-//	@Failure		403		{object}	model.MyError
-//	@Failure		404		{object}	model.MyError
-//	@Failure		500		{object}	model.MyError
+//	@Success		200		{object}	model.ResponseSuccess
+//	@Failure		400		{object}	model.ResponseFailed
+//	@Failure		401		{object}	model.ResponseFailed
+//	@Failure		403		{object}	model.ResponseFailed
+//	@Failure		404		{object}	model.ResponseFailed
+//	@Failure		500		{object}	model.ResponseFailed
 //	@Security		Bearer
 //	@Router			/social_media/{id} [delete]
-func (smc *SocialMediaController) Delete(ctx *gin.Context) {
+func (smc *SocialMediaController) DeleteSocialMedia(ctx *gin.Context) {
 	id := ctx.Param("id")
 	userId, isExist := ctx.Get("user_id")
 	if !isExist {
-		ctx.AbortWithStatusJSON(http.StatusInternalServerError, model.MyError{
-			Err: model.ErrorInvalidToken.Err,
+		ctx.AbortWithStatusJSON(http.StatusInternalServerError, model.ResponseFailed{
+			Meta: model.Meta{
+				Code:    http.StatusInternalServerError,
+				Message: http.StatusText(http.StatusInternalServerError),
+			},
+			Error: model.ErrorInvalidToken.Err,
 		})
 		return
 	}
@@ -244,24 +330,42 @@ func (smc *SocialMediaController) Delete(ctx *gin.Context) {
 
 	if err != nil {
 		if err == model.ErrorNotFound {
-			ctx.AbortWithStatusJSON(http.StatusNotFound, model.MyError{
-				Err: model.ErrorNotFound.Err,
+			ctx.AbortWithStatusJSON(http.StatusNotFound, model.ResponseFailed{
+				Meta: model.Meta{
+					Code:    http.StatusNotFound,
+					Message: http.StatusText(http.StatusNotFound),
+				},
+				Error: err.Error(),
 			})
 			return
+
 		} else if err == model.ErrorForbiddenAccess {
-			ctx.AbortWithStatusJSON(http.StatusForbidden, model.MyError{
-				Err: model.ErrorForbiddenAccess.Err,
+			ctx.AbortWithStatusJSON(http.StatusForbidden, model.ResponseFailed{
+				Meta: model.Meta{
+					Code:    http.StatusForbidden,
+					Message: http.StatusText(http.StatusForbidden),
+				},
+				Error: err.Error(),
 			})
 			return
 		}
-		ctx.AbortWithStatusJSON(http.StatusInternalServerError, model.MyError{
-			Err: err.Error(),
+		ctx.AbortWithStatusJSON(http.StatusInternalServerError, model.ResponseFailed{
+			Meta: model.Meta{
+				Code:    http.StatusInternalServerError,
+				Message: http.StatusText(http.StatusInternalServerError),
+			},
+			Error: err.Error(),
 		})
 		return
 	}
 
-	ctx.JSON(http.StatusOK, model.DeleteSocialMediaResponse{
-		Message: "Success delete Social Media!",
+	ctx.JSON(http.StatusOK, model.ResponseSuccess{
+		Meta: model.Meta{
+			Code:    http.StatusOK,
+			Message: http.StatusText(http.StatusOK),
+		},
+		Data: "Delete social media success.",
 	})
+	return
 
 }

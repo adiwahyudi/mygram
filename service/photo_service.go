@@ -31,7 +31,7 @@ func (ps *PhotoService) GetAll() ([]model.PhotoResponse, error) {
 			UserID:    val.UserID,
 			Title:     val.Title,
 			Caption:   val.Caption,
-			PhotoURL:  val.Caption,
+			PhotoURL:  val.PhotoURL,
 			CreatedAt: val.CreatedAt,
 			UpdatedAt: val.UpdatedAt,
 		})
@@ -55,7 +55,7 @@ func (ps *PhotoService) GetById(id string) (model.PhotoResponse, error) {
 		UserID:    photo.UserID,
 		Title:     photo.Title,
 		Caption:   photo.Caption,
-		PhotoURL:  photo.Caption,
+		PhotoURL:  photo.PhotoURL,
 		CreatedAt: photo.CreatedAt,
 		UpdatedAt: photo.UpdatedAt,
 	}, nil

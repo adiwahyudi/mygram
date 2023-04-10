@@ -29,7 +29,7 @@ func Routes(g *gin.Engine, db *gorm.DB) {
 
 	base := g.Group("/api/v1")
 	{
-		base.GET("", controller.WelcomeController)
+		base.GET("", controller.BaseContoller)
 		auth := base.Group("/auth")
 		{
 			auth.POST("/register", userController.Register)
@@ -37,20 +37,20 @@ func Routes(g *gin.Engine, db *gorm.DB) {
 		}
 		socialMediaRoute := base.Group("/social_media", middleware.AuthMiddleware)
 		{
-			socialMediaRoute.GET("", socialMediaController.GetList)
-			socialMediaRoute.GET("/:id", socialMediaController.GetByID)
-			socialMediaRoute.POST("", socialMediaController.Create)
-			socialMediaRoute.PUT("/:id", socialMediaController.Update)
-			socialMediaRoute.DELETE("/:id", socialMediaController.Delete)
+			socialMediaRoute.GET("", socialMediaController.GetListSocialMedias)
+			socialMediaRoute.GET("/:id", socialMediaController.GetOneSocialMediaByID)
+			socialMediaRoute.POST("", socialMediaController.CreateSocialMedia)
+			socialMediaRoute.PUT("/:id", socialMediaController.UpdateSocialMedia)
+			socialMediaRoute.DELETE("/:id", socialMediaController.DeleteSocialMedia)
 
 		}
 		photoRoute := base.Group("/photo", middleware.AuthMiddleware)
 		{
-			photoRoute.GET("", photoController.GetList)
-			photoRoute.GET("/:id", photoController.GetByID)
-			photoRoute.POST("", photoController.Create)
-			photoRoute.PUT("/:id", photoController.Update)
-			photoRoute.DELETE("/:id", photoController.Delete)
+			photoRoute.GET("", photoController.GetListPhotos)
+			photoRoute.GET("/:id", photoController.GetPhotoByID)
+			photoRoute.POST("", photoController.CreatePhoto)
+			photoRoute.PUT("/:id", photoController.UpdatePhoto)
+			photoRoute.DELETE("/:id", photoController.DeletePhoto)
 		}
 
 		commentRoute := base.Group("/comment", middleware.AuthMiddleware)

@@ -1,3 +1,5 @@
-# mygram
+# Mygram
 
-### final project [dtsfga](https://digitalent.kominfo.go.id/akademi/FGA) [hactiv8](https://www.hacktiv8.com/)
+### Final Project for Scalable Web Service with Golang - Batch 1, [DTSFGA](https://digitalent.kominfo.go.id/akademi/FGA).
+
+### Thanks to [Mas Albert](https://github.com/berdoezt) as Instructor and [Hacktiv8](https://www.hacktiv8.com/).

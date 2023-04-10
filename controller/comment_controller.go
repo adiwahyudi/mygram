@@ -26,22 +26,32 @@ func NewCommentController(commentService service.CommentService) *CommentControl
 //	@Tags			Comment
 //	@Accept			json
 //	@Produce		json
-//	@Success		200		{array}		model.CommentResponse
-//	@Failure		401		{object}	model.MyError
-//	@Failure		500		{object}	model.MyError
+//	@Success		200		{object}	model.ResponseSuccess
+//	@Failure		401		{object}	model.ResponseFailed
+//	@Failure		500		{object}	model.ResponseFailed
 //	@Security		Bearer
 //	@Router			/comment [get]
 func (cc *CommentController) GetListComments(ctx *gin.Context) {
 	comments, err := cc.CommentService.GetAll()
 
 	if err != nil {
-		ctx.AbortWithStatusJSON(http.StatusInternalServerError, model.MyError{
-			Err: err.Error(),
+		ctx.AbortWithStatusJSON(http.StatusInternalServerError, model.ResponseFailed{
+			Meta: model.Meta{
+				Code:    http.StatusInternalServerError,
+				Message: http.StatusText(http.StatusInternalServerError),
+			},
+			Error: err.Error(),
 		})
 		return
 	}
 
-	ctx.JSON(http.StatusOK, comments)
+	ctx.JSON(http.StatusOK, model.ResponseSuccess{
+		Meta: model.Meta{
+			Code:    http.StatusOK,
+			Message: http.StatusText(http.StatusOK),
+		},
+		Data: comments,
+	})
 	return
 }
 
@@ -53,10 +63,10 @@ func (cc *CommentController) GetListComments(ctx *gin.Context) {
 //	@Accept			json
 //	@Produce		json
 //	@Param			id	path		string	true	"Comment ID"
-//	@Success		200		{object}	model.CommentResponse
-//	@Failure		401		{object}	model.MyError
-//	@Failure		404		{object}	model.MyError
-//	@Failure		500		{object}	model.MyError
+//	@Success		200		{object}	model.ResponseSuccess
+//	@Failure		401		{object}	model.ResponseFailed
+//	@Failure		404		{object}	model.ResponseFailed
+//	@Failure		500		{object}	model.ResponseFailed
 //	@Security		Bearer
 //	@Router			/comment/:id [get]
 func (cc *CommentController) GetOneCommentsByID(ctx *gin.Context) {
@@ -64,19 +74,33 @@ func (cc *CommentController) GetOneCommentsByID(ctx *gin.Context) {
 
 	comment, err := cc.CommentService.GetById(id)
 	if err != nil {
-		if err != model.ErrorNotFound {
-			ctx.AbortWithStatusJSON(http.StatusInternalServerError, model.MyError{
-				Err: err.Error(),
+		if err == model.ErrorNotFound {
+			ctx.AbortWithStatusJSON(http.StatusNotFound, model.ResponseFailed{
+				Meta: model.Meta{
+					Code:    http.StatusNotFound,
+					Message: http.StatusText(http.StatusNotFound),
+				},
+				Error: "Comment " + err.Error(),
 			})
 			return
 		}
-		ctx.AbortWithStatusJSON(http.StatusNotFound, model.MyError{
-			Err: err.Error(),
+		ctx.AbortWithStatusJSON(http.StatusInternalServerError, model.ResponseFailed{
+			Meta: model.Meta{
+				Code:    http.StatusInternalServerError,
+				Message: http.StatusText(http.StatusInternalServerError),
+			},
+			Error: err.Error(),
 		})
 		return
 	}
 
-	ctx.JSON(http.StatusOK, comment)
+	ctx.JSON(http.StatusOK, model.ResponseSuccess{
+		Meta: model.Meta{
+			Code:    http.StatusOK,
+			Message: http.StatusText(http.StatusOK),
+		},
+		Data: comment,
+	})
 	return
 }
 
@@ -89,42 +113,58 @@ func (cc *CommentController) GetOneCommentsByID(ctx *gin.Context) {
 //	@Produce		json
 //	@Param			photo_id	path		string	true	"Photo ID"
 //	@Param			request	body		model.CommentCreateRequest	true	"Comment request is required"
-//	@Success		201		{object}	model.CommentCreateResponse
-//	@Failure		400		{object}	model.MyError
-//	@Failure		401		{object}	model.MyError
-//	@Failure		404		{object}	model.MyError
-//	@Failure		500		{object}	model.MyError
+//	@Success		201		{object}	model.ResponseSuccess
+//	@Failure		400		{object}	model.ResponseFailed
+//	@Failure		401		{object}	model.ResponseFailed
+//	@Failure		404		{object}	model.ResponseFailed
+//	@Failure		500		{object}	model.ResponseFailed
 //	@Security		Bearer
 //	@Router			/comment/:photo_id [post]
 func (cc *CommentController) CreateCommentByPhotoID(ctx *gin.Context) {
 	commentRequest := model.CommentCreateRequest{}
 
 	if err := ctx.ShouldBindJSON(&commentRequest); err != nil {
-		ctx.AbortWithStatusJSON(http.StatusBadRequest, model.MyError{
-			Err: err.Error(),
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, model.ResponseFailed{
+			Meta: model.Meta{
+				Code:    http.StatusBadRequest,
+				Message: http.StatusText(http.StatusBadRequest),
+			},
+			Error: err.Error(),
 		})
 		return
 	}
 
 	valid, err := valid.ValidateStruct(commentRequest)
 	if err != nil {
-		ctx.AbortWithStatusJSON(http.StatusBadRequest, model.MyError{
-			Err: err.Error(),
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, model.ResponseFailed{
+			Meta: model.Meta{
+				Code:    http.StatusBadRequest,
+				Message: http.StatusText(http.StatusBadRequest),
+			},
+			Error: err.Error(),
 		})
 		return
 	}
 
 	if !valid {
-		ctx.AbortWithStatusJSON(http.StatusBadRequest, model.MyError{
-			Err: err.Error(),
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, model.ResponseFailed{
+			Meta: model.Meta{
+				Code:    http.StatusBadRequest,
+				Message: http.StatusText(http.StatusBadRequest),
+			},
+			Error: err.Error(),
 		})
 		return
 	}
 
 	userId, isExist := ctx.Get("user_id")
 	if !isExist {
-		ctx.AbortWithStatusJSON(http.StatusInternalServerError, model.MyError{
-			Err: model.ErrorInvalidToken.Err,
+		ctx.AbortWithStatusJSON(http.StatusInternalServerError, model.ResponseFailed{
+			Meta: model.Meta{
+				Code:    http.StatusInternalServerError,
+				Message: http.StatusText(http.StatusInternalServerError),
+			},
+			Error: model.ErrorInvalidToken.Err,
 		})
 		return
 	}
@@ -133,19 +173,33 @@ func (cc *CommentController) CreateCommentByPhotoID(ctx *gin.Context) {
 	result, err := cc.CommentService.Add(commentRequest, userId.(string), photoId)
 
 	if err != nil {
-		if err != model.ErrorNotFound {
-			ctx.AbortWithStatusJSON(http.StatusInternalServerError, model.MyError{
-				Err: err.Error(),
+		if err == model.ErrorNotFound {
+			ctx.AbortWithStatusJSON(http.StatusInternalServerError, model.ResponseFailed{
+				Meta: model.Meta{
+					Code:    http.StatusInternalServerError,
+					Message: http.StatusText(http.StatusInternalServerError),
+				},
+				Error: err.Error(),
 			})
 			return
 		}
-		ctx.AbortWithStatusJSON(http.StatusNotFound, model.MyError{
-			Err: model.ErrorPhotoNotFound.Err,
+		ctx.AbortWithStatusJSON(http.StatusNotFound, model.ResponseFailed{
+			Meta: model.Meta{
+				Code:    http.StatusNotFound,
+				Message: http.StatusText(http.StatusNotFound),
+			},
+			Error: "Comment " + err.Error(),
 		})
 		return
 	}
 
-	ctx.JSON(http.StatusCreated, result)
+	ctx.JSON(http.StatusCreated, model.ResponseSuccess{
+		Meta: model.Meta{
+			Code:    http.StatusCreated,
+			Message: http.StatusText(http.StatusCreated),
+		},
+		Data: result,
+	})
 	return
 
 }
@@ -159,43 +213,59 @@ func (cc *CommentController) CreateCommentByPhotoID(ctx *gin.Context) {
 //	@Produce		json
 //	@Param			id	path		string	true	"Comment ID"
 //	@Param			request	body		model.CommentUpdateRequest	true	"Comment request is required"
-//	@Success		200		{object}	model.CommentUpdateResponse
-//	@Failure		400		{object}	model.MyError
-//	@Failure		401		{object}	model.MyError
-//	@Failure		403		{object}	model.MyError
-//	@Failure		404		{object}	model.MyError
-//	@Failure		500		{object}	model.MyError
+//	@Success		200		{object}	model.ResponseSuccess
+//	@Failure		400		{object}	model.ResponseFailed
+//	@Failure		401		{object}	model.ResponseFailed
+//	@Failure		403		{object}	model.ResponseFailed
+//	@Failure		404		{object}	model.ResponseFailed
+//	@Failure		500		{object}	model.ResponseFailed
 //	@Security		Bearer
 //	@Router			/comment/:id [put]
 func (cc *CommentController) UpdateComment(ctx *gin.Context) {
 	commentRequest := model.CommentUpdateRequest{}
 
 	if err := ctx.ShouldBindJSON(&commentRequest); err != nil {
-		ctx.AbortWithStatusJSON(http.StatusBadRequest, model.MyError{
-			Err: err.Error(),
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, model.ResponseFailed{
+			Meta: model.Meta{
+				Code:    http.StatusBadRequest,
+				Message: http.StatusText(http.StatusBadRequest),
+			},
+			Error: err.Error(),
 		})
 		return
 	}
 
 	valid, err := valid.ValidateStruct(commentRequest)
 	if err != nil {
-		ctx.AbortWithStatusJSON(http.StatusBadRequest, model.MyError{
-			Err: err.Error(),
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, model.ResponseFailed{
+			Meta: model.Meta{
+				Code:    http.StatusBadRequest,
+				Message: http.StatusText(http.StatusBadRequest),
+			},
+			Error: err.Error(),
 		})
 		return
 	}
 
 	if !valid {
-		ctx.AbortWithStatusJSON(http.StatusBadRequest, model.MyError{
-			Err: err.Error(),
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, model.ResponseFailed{
+			Meta: model.Meta{
+				Code:    http.StatusBadRequest,
+				Message: http.StatusText(http.StatusBadRequest),
+			},
+			Error: err.Error(),
 		})
 		return
 	}
 
 	userId, isExist := ctx.Get("user_id")
 	if !isExist {
-		ctx.AbortWithStatusJSON(http.StatusInternalServerError, model.MyError{
-			Err: model.ErrorInvalidToken.Err,
+		ctx.AbortWithStatusJSON(http.StatusInternalServerError, model.ResponseFailed{
+			Meta: model.Meta{
+				Code:    http.StatusInternalServerError,
+				Message: http.StatusText(http.StatusInternalServerError),
+			},
+			Error: model.ErrorInvalidToken.Err,
 		})
 		return
 	}
@@ -205,24 +275,43 @@ func (cc *CommentController) UpdateComment(ctx *gin.Context) {
 
 	if err != nil {
 		if err == model.ErrorNotFound {
-			ctx.AbortWithStatusJSON(http.StatusNotFound, model.MyError{
-				Err: model.ErrorNotFound.Err,
+			ctx.AbortWithStatusJSON(http.StatusNotFound, model.ResponseFailed{
+				Meta: model.Meta{
+					Code:    http.StatusNotFound,
+					Message: http.StatusText(http.StatusNotFound),
+				},
+				Error: "Comment " + err.Error(),
 			})
 			return
 		} else if err == model.ErrorForbiddenAccess {
-			ctx.AbortWithStatusJSON(http.StatusForbidden, model.MyError{
-				Err: model.ErrorForbiddenAccess.Err,
+			ctx.AbortWithStatusJSON(http.StatusForbidden, model.ResponseFailed{
+				Meta: model.Meta{
+					Code:    http.StatusForbidden,
+					Message: http.StatusText(http.StatusForbidden),
+				},
+				Error: err.Error(),
 			})
 			return
 		}
-		ctx.AbortWithStatusJSON(http.StatusInternalServerError, model.MyError{
-			Err: err.Error(),
+		ctx.AbortWithStatusJSON(http.StatusInternalServerError, model.ResponseFailed{
+			Meta: model.Meta{
+				Code:    http.StatusInternalServerError,
+				Message: http.StatusText(http.StatusInternalServerError),
+			},
+			Error: err.Error(),
 		})
 		return
 	}
 
-	ctx.JSON(http.StatusOK, result)
+	ctx.JSON(http.StatusOK, model.ResponseSuccess{
+		Meta: model.Meta{
+			Code:    http.StatusOK,
+			Message: http.StatusText(http.StatusOK),
+		},
+		Data: result,
+	})
 	return
+
 }
 
 // DeleteComment godoc
@@ -233,22 +322,27 @@ func (cc *CommentController) UpdateComment(ctx *gin.Context) {
 //	@Accept			json
 //	@Produce		json
 //	@Param			id	path		string	true	"Comment ID"
-//	@Success		200		{object}	model.DeleteCommentResponse
-//	@Failure		400		{object}	model.MyError
-//	@Failure		401		{object}	model.MyError
-//	@Failure		403		{object}	model.MyError
-//	@Failure		404		{object}	model.MyError
-//	@Failure		500		{object}	model.MyError
+//	@Success		200		{object}	model.ResponseSuccess
+//	@Failure		400		{object}	model.ResponseFailed
+//	@Failure		401		{object}	model.ResponseFailed
+//	@Failure		403		{object}	model.ResponseFailed
+//	@Failure		404		{object}	model.ResponseFailed
+//	@Failure		500		{object}	model.ResponseFailed
 //	@Security		Bearer
 //	@Router			/comment/:id [delete]
 func (cc *CommentController) DeleteComment(ctx *gin.Context) {
 
 	userId, isExist := ctx.Get("user_id")
 	if !isExist {
-		ctx.AbortWithStatusJSON(http.StatusInternalServerError, model.MyError{
-			Err: model.ErrorInvalidToken.Err,
+		ctx.AbortWithStatusJSON(http.StatusInternalServerError, model.ResponseFailed{
+			Meta: model.Meta{
+				Code:    http.StatusInternalServerError,
+				Message: http.StatusText(http.StatusInternalServerError),
+			},
+			Error: model.ErrorInvalidToken.Err,
 		})
 		return
+
 	}
 
 	id := ctx.Param("id")
@@ -256,24 +350,40 @@ func (cc *CommentController) DeleteComment(ctx *gin.Context) {
 
 	if err != nil {
 		if err == model.ErrorNotFound {
-			ctx.AbortWithStatusJSON(http.StatusNotFound, model.MyError{
-				Err: model.ErrorNotFound.Err,
+			ctx.AbortWithStatusJSON(http.StatusNotFound, model.ResponseFailed{
+				Meta: model.Meta{
+					Code:    http.StatusNotFound,
+					Message: http.StatusText(http.StatusNotFound),
+				},
+				Error: "Comment " + err.Error(),
 			})
 			return
 		} else if err == model.ErrorForbiddenAccess {
-			ctx.AbortWithStatusJSON(http.StatusForbidden, model.MyError{
-				Err: model.ErrorForbiddenAccess.Err,
+			ctx.AbortWithStatusJSON(http.StatusForbidden, model.ResponseFailed{
+				Meta: model.Meta{
+					Code:    http.StatusForbidden,
+					Message: http.StatusText(http.StatusForbidden),
+				},
+				Error: err.Error(),
 			})
 			return
 		}
-		ctx.AbortWithStatusJSON(http.StatusInternalServerError, model.MyError{
-			Err: err.Error(),
+		ctx.AbortWithStatusJSON(http.StatusInternalServerError, model.ResponseFailed{
+			Meta: model.Meta{
+				Code:    http.StatusInternalServerError,
+				Message: http.StatusText(http.StatusInternalServerError),
+			},
+			Error: err.Error(),
 		})
 		return
 	}
 
-	ctx.JSON(http.StatusOK, model.DeleteCommentResponse{
-		Message: "Delete comment success!",
+	ctx.JSON(http.StatusOK, model.ResponseSuccess{
+		Meta: model.Meta{
+			Code:    http.StatusOK,
+			Message: http.StatusText(http.StatusOK),
+		},
+		Data: "Delete comment success.",
 	})
 	return
 }

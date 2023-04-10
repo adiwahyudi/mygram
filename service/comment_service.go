@@ -1,7 +1,6 @@
 package service
 
 import (
-	"fmt"
 	"mygram/helper"
 	"mygram/model"
 	"mygram/repository"
@@ -22,7 +21,6 @@ func NewCommentService(commentRepository repository.ICommentRepository, photoRep
 func (cs *CommentService) Add(request model.CommentCreateRequest, userId string, photoId string) (model.CommentCreateResponse, error) {
 	id := helper.GenerateID()
 
-	fmt.Println(photoId)
 	_, err := cs.PhotoRepository.GetOne(photoId)
 	if err != nil {
 		return model.CommentCreateResponse{}, err
