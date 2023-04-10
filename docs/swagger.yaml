@@ -1,3 +1,4 @@
+basePath: /api/v1
 consumes:
 - application/json
 definitions:
@@ -6,72 +7,16 @@ definitions:
       message:
         type: string
     type: object
-  model.CommentCreateResponse:
-    properties:
-      created_at:
-        type: string
-      id:
-        type: string
-      message:
-        type: string
-      photo_id:
-        type: string
-      user_id:
-        type: string
-    type: object
-  model.CommentResponse:
-    properties:
-      created_at:
-        type: string
-      id:
-        type: string
-      message:
-        type: string
-      photo_id:
-        type: string
-      updated_at:
-        type: string
-      user_id:
-        type: string
-    type: object
   model.CommentUpdateRequest:
     properties:
       message:
         type: string
     type: object
-  model.CommentUpdateResponse:
+  model.Meta:
     properties:
-      created_at:
-        type: string
-      id:
-        type: string
+      code:
+        type: integer
       message:
-        type: string
-      photo_id:
-        type: string
-      updated_at:
-        type: string
-      user_id:
-        type: string
-    type: object
-  model.DeleteCommentResponse:
-    properties:
-      message:
-        type: string
-    type: object
-  model.DeletePhotoResponse:
-    properties:
-      message:
-        type: string
-    type: object
-  model.DeleteSocialMediaResponse:
-    properties:
-      message:
-        type: string
-    type: object
-  model.MyError:
-    properties:
-      error:
         type: string
     type: object
   model.PhotoCreateRequest:
@@ -83,38 +28,6 @@ definitions:
       title:
         type: string
     type: object
-  model.PhotoCreateResponse:
-    properties:
-      caption:
-        type: string
-      created_at:
-        type: string
-      id:
-        type: string
-      photo_url:
-        type: string
-      title:
-        type: string
-      user_id:
-        type: string
-    type: object
-  model.PhotoResponse:
-    properties:
-      caption:
-        type: string
-      created_at:
-        type: string
-      id:
-        type: string
-      photo_url:
-        type: string
-      title:
-        type: string
-      updated_at:
-        type: string
-      user_id:
-        type: string
-    type: object
   model.PhotoUpdateRequest:
     properties:
       caption:
@@ -124,56 +37,24 @@ definitions:
       title:
         type: string
     type: object
-  model.PhotoUpdateResponse:
+  model.ResponseFailed:
     properties:
-      caption:
+      error:
         type: string
-      created_at:
-        type: string
-      id:
-        type: string
-      photo_url:
-        type: string
-      title:
-        type: string
-      updated_at:
-        type: string
-      user_id:
-        type: string
+      meta:
+        $ref: '#/definitions/model.Meta'
+    type: object
+  model.ResponseSuccess:
+    properties:
+      data: {}
+      meta:
+        $ref: '#/definitions/model.Meta'
     type: object
   model.SocialMediaCreateRequest:
     properties:
       name:
         type: string
       social_media_url:
-        type: string
-    type: object
-  model.SocialMediaCreateResponse:
-    properties:
-      created_at:
-        type: string
-      id:
-        type: string
-      name:
-        type: string
-      social_media_url:
-        type: string
-      user_id:
-        type: string
-    type: object
-  model.SocialMediaResponse:
-    properties:
-      created_at:
-        type: string
-      id:
-        type: string
-      name:
-        type: string
-      social_media_url:
-        type: string
-      updated_at:
-        type: string
-      user_id:
         type: string
     type: object
   model.SocialMediaUpdateRequest:
@@ -183,31 +64,11 @@ definitions:
       social_media_url:
         type: string
     type: object
-  model.SocialMediaUpdateResponse:
-    properties:
-      created_at:
-        type: string
-      id:
-        type: string
-      name:
-        type: string
-      social_media_url:
-        type: string
-      updated_at:
-        type: string
-      user_id:
-        type: string
-    type: object
   model.UserLoginRequest:
     properties:
       password:
         type: string
       username:
-        type: string
-    type: object
-  model.UserLoginResponse:
-    properties:
-      token:
         type: string
     type: object
   model.UserRegisterRequest:
@@ -221,18 +82,7 @@ definitions:
       username:
         type: string
     type: object
-  model.UserRegisterResponse:
-    properties:
-      created_at:
-        type: string
-      id:
-        type: string
-      updated_at:
-        type: string
-      username:
-        type: string
-    type: object
-host: localhost:8080
+host: https://mygram-api.up.railway.app
 info:
   contact: {}
   description: Final Project for Scalable Web Service with Golang - Batch 1, DTS-FGA.
@@ -257,15 +107,15 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/model.UserLoginResponse'
+            $ref: '#/definitions/model.ResponseSuccess'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/model.MyError'
+            $ref: '#/definitions/model.ResponseFailed'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/model.MyError'
+            $ref: '#/definitions/model.ResponseFailed'
       summary: Login User
       tags:
       - User
@@ -287,15 +137,15 @@ paths:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/model.UserRegisterResponse'
+            $ref: '#/definitions/model.ResponseSuccess'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/model.MyError'
+            $ref: '#/definitions/model.ResponseFailed'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/model.MyError'
+            $ref: '#/definitions/model.ResponseFailed'
       summary: Register User
       tags:
       - User
@@ -310,17 +160,15 @@ paths:
         "200":
           description: OK
           schema:
-            items:
-              $ref: '#/definitions/model.CommentResponse'
-            type: array
+            $ref: '#/definitions/model.ResponseSuccess'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/model.MyError'
+            $ref: '#/definitions/model.ResponseFailed'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/model.MyError'
+            $ref: '#/definitions/model.ResponseFailed'
       security:
       - Bearer: []
       summary: Get all comment
@@ -343,27 +191,27 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/model.DeleteCommentResponse'
+            $ref: '#/definitions/model.ResponseSuccess'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/model.MyError'
+            $ref: '#/definitions/model.ResponseFailed'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/model.MyError'
+            $ref: '#/definitions/model.ResponseFailed'
         "403":
           description: Forbidden
           schema:
-            $ref: '#/definitions/model.MyError'
+            $ref: '#/definitions/model.ResponseFailed'
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/model.MyError'
+            $ref: '#/definitions/model.ResponseFailed'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/model.MyError'
+            $ref: '#/definitions/model.ResponseFailed'
       security:
       - Bearer: []
       summary: Delete comment
@@ -385,19 +233,19 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/model.CommentResponse'
+            $ref: '#/definitions/model.ResponseSuccess'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/model.MyError'
+            $ref: '#/definitions/model.ResponseFailed'
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/model.MyError'
+            $ref: '#/definitions/model.ResponseFailed'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/model.MyError'
+            $ref: '#/definitions/model.ResponseFailed'
       security:
       - Bearer: []
       summary: Get comment by ID
@@ -425,27 +273,27 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/model.CommentUpdateResponse'
+            $ref: '#/definitions/model.ResponseSuccess'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/model.MyError'
+            $ref: '#/definitions/model.ResponseFailed'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/model.MyError'
+            $ref: '#/definitions/model.ResponseFailed'
         "403":
           description: Forbidden
           schema:
-            $ref: '#/definitions/model.MyError'
+            $ref: '#/definitions/model.ResponseFailed'
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/model.MyError'
+            $ref: '#/definitions/model.ResponseFailed'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/model.MyError'
+            $ref: '#/definitions/model.ResponseFailed'
       security:
       - Bearer: []
       summary: Update comment
@@ -474,23 +322,23 @@ paths:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/model.CommentCreateResponse'
+            $ref: '#/definitions/model.ResponseSuccess'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/model.MyError'
+            $ref: '#/definitions/model.ResponseFailed'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/model.MyError'
+            $ref: '#/definitions/model.ResponseFailed'
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/model.MyError'
+            $ref: '#/definitions/model.ResponseFailed'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/model.MyError'
+            $ref: '#/definitions/model.ResponseFailed'
       security:
       - Bearer: []
       summary: Create comment
@@ -507,17 +355,15 @@ paths:
         "200":
           description: OK
           schema:
-            items:
-              $ref: '#/definitions/model.PhotoResponse'
-            type: array
+            $ref: '#/definitions/model.ResponseSuccess'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/model.MyError'
+            $ref: '#/definitions/model.ResponseFailed'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/model.MyError'
+            $ref: '#/definitions/model.ResponseFailed'
       security:
       - Bearer: []
       summary: Get All Photo
@@ -540,19 +386,19 @@ paths:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/model.PhotoCreateResponse'
+            $ref: '#/definitions/model.ResponseSuccess'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/model.MyError'
+            $ref: '#/definitions/model.ResponseFailed'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/model.MyError'
+            $ref: '#/definitions/model.ResponseFailed'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/model.MyError'
+            $ref: '#/definitions/model.ResponseFailed'
       security:
       - Bearer: []
       summary: Create Photo
@@ -575,27 +421,27 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/model.DeletePhotoResponse'
+            $ref: '#/definitions/model.ResponseSuccess'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/model.MyError'
+            $ref: '#/definitions/model.ResponseFailed'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/model.MyError'
+            $ref: '#/definitions/model.ResponseFailed'
         "403":
           description: Forbidden
           schema:
-            $ref: '#/definitions/model.MyError'
+            $ref: '#/definitions/model.ResponseFailed'
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/model.MyError'
+            $ref: '#/definitions/model.ResponseFailed'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/model.MyError'
+            $ref: '#/definitions/model.ResponseFailed'
       security:
       - Bearer: []
       summary: Delete Photo
@@ -617,19 +463,19 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/model.PhotoResponse'
+            $ref: '#/definitions/model.ResponseSuccess'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/model.MyError'
+            $ref: '#/definitions/model.ResponseFailed'
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/model.MyError'
+            $ref: '#/definitions/model.ResponseFailed'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/model.MyError'
+            $ref: '#/definitions/model.ResponseFailed'
       security:
       - Bearer: []
       summary: Get Photo by ID.
@@ -657,27 +503,27 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/model.PhotoUpdateResponse'
+            $ref: '#/definitions/model.ResponseSuccess'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/model.MyError'
+            $ref: '#/definitions/model.ResponseFailed'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/model.MyError'
+            $ref: '#/definitions/model.ResponseFailed'
         "403":
           description: Forbidden
           schema:
-            $ref: '#/definitions/model.MyError'
+            $ref: '#/definitions/model.ResponseFailed'
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/model.MyError'
+            $ref: '#/definitions/model.ResponseFailed'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/model.MyError'
+            $ref: '#/definitions/model.ResponseFailed'
       security:
       - Bearer: []
       summary: Update Photo
@@ -694,17 +540,15 @@ paths:
         "200":
           description: OK
           schema:
-            items:
-              $ref: '#/definitions/model.SocialMediaResponse'
-            type: array
+            $ref: '#/definitions/model.ResponseSuccess'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/model.MyError'
+            $ref: '#/definitions/model.ResponseFailed'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/model.MyError'
+            $ref: '#/definitions/model.ResponseFailed'
       security:
       - Bearer: []
       summary: Get All Social Media
@@ -727,19 +571,19 @@ paths:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/model.SocialMediaCreateResponse'
+            $ref: '#/definitions/model.ResponseSuccess'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/model.MyError'
+            $ref: '#/definitions/model.ResponseFailed'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/model.MyError'
+            $ref: '#/definitions/model.ResponseFailed'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/model.MyError'
+            $ref: '#/definitions/model.ResponseFailed'
       security:
       - Bearer: []
       summary: Create Social Media
@@ -762,27 +606,27 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/model.DeleteSocialMediaResponse'
+            $ref: '#/definitions/model.ResponseSuccess'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/model.MyError'
+            $ref: '#/definitions/model.ResponseFailed'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/model.MyError'
+            $ref: '#/definitions/model.ResponseFailed'
         "403":
           description: Forbidden
           schema:
-            $ref: '#/definitions/model.MyError'
+            $ref: '#/definitions/model.ResponseFailed'
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/model.MyError'
+            $ref: '#/definitions/model.ResponseFailed'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/model.MyError'
+            $ref: '#/definitions/model.ResponseFailed'
       security:
       - Bearer: []
       summary: Delete Social Media
@@ -804,19 +648,19 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/model.SocialMediaResponse'
+            $ref: '#/definitions/model.ResponseSuccess'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/model.MyError'
+            $ref: '#/definitions/model.ResponseFailed'
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/model.MyError'
+            $ref: '#/definitions/model.ResponseFailed'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/model.MyError'
+            $ref: '#/definitions/model.ResponseFailed'
       security:
       - Bearer: []
       summary: Get Social Media by ID.
@@ -844,27 +688,27 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/model.SocialMediaUpdateResponse'
+            $ref: '#/definitions/model.ResponseSuccess'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/model.MyError'
+            $ref: '#/definitions/model.ResponseFailed'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/model.MyError'
+            $ref: '#/definitions/model.ResponseFailed'
         "403":
           description: Forbidden
           schema:
-            $ref: '#/definitions/model.MyError'
+            $ref: '#/definitions/model.ResponseFailed'
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/model.MyError'
+            $ref: '#/definitions/model.ResponseFailed'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/model.MyError'
+            $ref: '#/definitions/model.ResponseFailed'
       security:
       - Bearer: []
       summary: Update Social Media
@@ -873,7 +717,7 @@ paths:
 produces:
 - application/json
 schemes:
-- http
+- https
 securityDefinitions:
   Bearer:
     in: header

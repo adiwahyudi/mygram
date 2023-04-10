@@ -14,16 +14,24 @@ func AuthMiddleware(ctx *gin.Context) {
 	auth := ctx.GetHeader("Authorization")
 
 	if auth == "" {
-		ctx.AbortWithStatusJSON(http.StatusUnauthorized, model.MyError{
-			Err: model.ErrorNotAuthorized.Err,
+		ctx.AbortWithStatusJSON(http.StatusUnauthorized, model.ResponseFailed{
+			Meta: model.Meta{
+				Code:    http.StatusUnauthorized,
+				Message: http.StatusText(http.StatusUnauthorized),
+			},
+			Error: model.ErrorNotAuthorized.Err,
 		})
 		return
 	}
 	token := strings.Split(auth, " ")[1]
 
 	if token == "" {
-		ctx.AbortWithStatusJSON(http.StatusUnauthorized, model.MyError{
-			Err: model.ErrorNotAuthorized.Err,
+		ctx.AbortWithStatusJSON(http.StatusUnauthorized, model.ResponseFailed{
+			Meta: model.Meta{
+				Code:    http.StatusUnauthorized,
+				Message: http.StatusText(http.StatusUnauthorized),
+			},
+			Error: model.ErrorNotAuthorized.Err,
 		})
 		return
 	}
@@ -31,16 +39,24 @@ func AuthMiddleware(ctx *gin.Context) {
 	jwtToken, err := helper.VerifyToken(token)
 
 	if err != nil {
-		ctx.AbortWithStatusJSON(http.StatusInternalServerError, model.MyError{
-			Err: err.Error(),
+		ctx.AbortWithStatusJSON(http.StatusInternalServerError, model.ResponseFailed{
+			Meta: model.Meta{
+				Code:    http.StatusInternalServerError,
+				Message: http.StatusText(http.StatusInternalServerError),
+			},
+			Error: err.Error(),
 		})
 		return
 	}
 
 	claims, ok := jwtToken.Claims.(jwt.MapClaims)
 	if !ok {
-		ctx.AbortWithStatusJSON(http.StatusInternalServerError, model.MyError{
-			Err: err.Error(),
+		ctx.AbortWithStatusJSON(http.StatusInternalServerError, model.ResponseFailed{
+			Meta: model.Meta{
+				Code:    http.StatusInternalServerError,
+				Message: http.StatusText(http.StatusInternalServerError),
+			},
+			Error: err.Error(),
 		})
 		return
 	}

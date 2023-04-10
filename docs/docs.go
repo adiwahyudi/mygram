@@ -50,19 +50,19 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/model.UserLoginResponse"
+                            "$ref": "#/definitions/model.ResponseSuccess"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/model.MyError"
+                            "$ref": "#/definitions/model.ResponseFailed"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/model.MyError"
+                            "$ref": "#/definitions/model.ResponseFailed"
                         }
                     }
                 }
@@ -96,19 +96,19 @@ const docTemplate = `{
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/model.UserRegisterResponse"
+                            "$ref": "#/definitions/model.ResponseSuccess"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/model.MyError"
+                            "$ref": "#/definitions/model.ResponseFailed"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/model.MyError"
+                            "$ref": "#/definitions/model.ResponseFailed"
                         }
                     }
                 }
@@ -136,22 +136,19 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/model.CommentResponse"
-                            }
+                            "$ref": "#/definitions/model.ResponseSuccess"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/model.MyError"
+                            "$ref": "#/definitions/model.ResponseFailed"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/model.MyError"
+                            "$ref": "#/definitions/model.ResponseFailed"
                         }
                     }
                 }
@@ -188,25 +185,25 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/model.CommentResponse"
+                            "$ref": "#/definitions/model.ResponseSuccess"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/model.MyError"
+                            "$ref": "#/definitions/model.ResponseFailed"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/model.MyError"
+                            "$ref": "#/definitions/model.ResponseFailed"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/model.MyError"
+                            "$ref": "#/definitions/model.ResponseFailed"
                         }
                     }
                 }
@@ -250,37 +247,37 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/model.CommentUpdateResponse"
+                            "$ref": "#/definitions/model.ResponseSuccess"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/model.MyError"
+                            "$ref": "#/definitions/model.ResponseFailed"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/model.MyError"
+                            "$ref": "#/definitions/model.ResponseFailed"
                         }
                     },
                     "403": {
                         "description": "Forbidden",
                         "schema": {
-                            "$ref": "#/definitions/model.MyError"
+                            "$ref": "#/definitions/model.ResponseFailed"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/model.MyError"
+                            "$ref": "#/definitions/model.ResponseFailed"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/model.MyError"
+                            "$ref": "#/definitions/model.ResponseFailed"
                         }
                     }
                 }
@@ -315,37 +312,37 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/model.DeleteCommentResponse"
+                            "$ref": "#/definitions/model.ResponseSuccess"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/model.MyError"
+                            "$ref": "#/definitions/model.ResponseFailed"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/model.MyError"
+                            "$ref": "#/definitions/model.ResponseFailed"
                         }
                     },
                     "403": {
                         "description": "Forbidden",
                         "schema": {
-                            "$ref": "#/definitions/model.MyError"
+                            "$ref": "#/definitions/model.ResponseFailed"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/model.MyError"
+                            "$ref": "#/definitions/model.ResponseFailed"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/model.MyError"
+                            "$ref": "#/definitions/model.ResponseFailed"
                         }
                     }
                 }
@@ -391,31 +388,31 @@ const docTemplate = `{
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/model.CommentCreateResponse"
+                            "$ref": "#/definitions/model.ResponseSuccess"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/model.MyError"
+                            "$ref": "#/definitions/model.ResponseFailed"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/model.MyError"
+                            "$ref": "#/definitions/model.ResponseFailed"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/model.MyError"
+                            "$ref": "#/definitions/model.ResponseFailed"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/model.MyError"
+                            "$ref": "#/definitions/model.ResponseFailed"
                         }
                     }
                 }
@@ -443,22 +440,19 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/model.PhotoResponse"
-                            }
+                            "$ref": "#/definitions/model.ResponseSuccess"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/model.MyError"
+                            "$ref": "#/definitions/model.ResponseFailed"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/model.MyError"
+                            "$ref": "#/definitions/model.ResponseFailed"
                         }
                     }
                 }
@@ -495,25 +489,25 @@ const docTemplate = `{
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/model.PhotoCreateResponse"
+                            "$ref": "#/definitions/model.ResponseSuccess"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/model.MyError"
+                            "$ref": "#/definitions/model.ResponseFailed"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/model.MyError"
+                            "$ref": "#/definitions/model.ResponseFailed"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/model.MyError"
+                            "$ref": "#/definitions/model.ResponseFailed"
                         }
                     }
                 }
@@ -550,25 +544,25 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/model.PhotoResponse"
+                            "$ref": "#/definitions/model.ResponseSuccess"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/model.MyError"
+                            "$ref": "#/definitions/model.ResponseFailed"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/model.MyError"
+                            "$ref": "#/definitions/model.ResponseFailed"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/model.MyError"
+                            "$ref": "#/definitions/model.ResponseFailed"
                         }
                     }
                 }
@@ -612,37 +606,37 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/model.PhotoUpdateResponse"
+                            "$ref": "#/definitions/model.ResponseSuccess"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/model.MyError"
+                            "$ref": "#/definitions/model.ResponseFailed"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/model.MyError"
+                            "$ref": "#/definitions/model.ResponseFailed"
                         }
                     },
                     "403": {
                         "description": "Forbidden",
                         "schema": {
-                            "$ref": "#/definitions/model.MyError"
+                            "$ref": "#/definitions/model.ResponseFailed"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/model.MyError"
+                            "$ref": "#/definitions/model.ResponseFailed"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/model.MyError"
+                            "$ref": "#/definitions/model.ResponseFailed"
                         }
                     }
                 }
@@ -677,37 +671,37 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/model.DeletePhotoResponse"
+                            "$ref": "#/definitions/model.ResponseSuccess"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/model.MyError"
+                            "$ref": "#/definitions/model.ResponseFailed"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/model.MyError"
+                            "$ref": "#/definitions/model.ResponseFailed"
                         }
                     },
                     "403": {
                         "description": "Forbidden",
                         "schema": {
-                            "$ref": "#/definitions/model.MyError"
+                            "$ref": "#/definitions/model.ResponseFailed"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/model.MyError"
+                            "$ref": "#/definitions/model.ResponseFailed"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/model.MyError"
+                            "$ref": "#/definitions/model.ResponseFailed"
                         }
                     }
                 }
@@ -735,22 +729,19 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/model.SocialMediaResponse"
-                            }
+                            "$ref": "#/definitions/model.ResponseSuccess"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/model.MyError"
+                            "$ref": "#/definitions/model.ResponseFailed"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/model.MyError"
+                            "$ref": "#/definitions/model.ResponseFailed"
                         }
                     }
                 }
@@ -787,25 +778,25 @@ const docTemplate = `{
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/model.SocialMediaCreateResponse"
+                            "$ref": "#/definitions/model.ResponseSuccess"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/model.MyError"
+                            "$ref": "#/definitions/model.ResponseFailed"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/model.MyError"
+                            "$ref": "#/definitions/model.ResponseFailed"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/model.MyError"
+                            "$ref": "#/definitions/model.ResponseFailed"
                         }
                     }
                 }
@@ -842,25 +833,25 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/model.SocialMediaResponse"
+                            "$ref": "#/definitions/model.ResponseSuccess"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/model.MyError"
+                            "$ref": "#/definitions/model.ResponseFailed"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/model.MyError"
+                            "$ref": "#/definitions/model.ResponseFailed"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/model.MyError"
+                            "$ref": "#/definitions/model.ResponseFailed"
                         }
                     }
                 }
@@ -904,37 +895,37 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/model.SocialMediaUpdateResponse"
+                            "$ref": "#/definitions/model.ResponseSuccess"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/model.MyError"
+                            "$ref": "#/definitions/model.ResponseFailed"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/model.MyError"
+                            "$ref": "#/definitions/model.ResponseFailed"
                         }
                     },
                     "403": {
                         "description": "Forbidden",
                         "schema": {
-                            "$ref": "#/definitions/model.MyError"
+                            "$ref": "#/definitions/model.ResponseFailed"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/model.MyError"
+                            "$ref": "#/definitions/model.ResponseFailed"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/model.MyError"
+                            "$ref": "#/definitions/model.ResponseFailed"
                         }
                     }
                 }
@@ -969,37 +960,37 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/model.DeleteSocialMediaResponse"
+                            "$ref": "#/definitions/model.ResponseSuccess"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/model.MyError"
+                            "$ref": "#/definitions/model.ResponseFailed"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/model.MyError"
+                            "$ref": "#/definitions/model.ResponseFailed"
                         }
                     },
                     "403": {
                         "description": "Forbidden",
                         "schema": {
-                            "$ref": "#/definitions/model.MyError"
+                            "$ref": "#/definitions/model.ResponseFailed"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/model.MyError"
+                            "$ref": "#/definitions/model.ResponseFailed"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/model.MyError"
+                            "$ref": "#/definitions/model.ResponseFailed"
                         }
                     }
                 }
@@ -1015,49 +1006,6 @@ const docTemplate = `{
                 }
             }
         },
-        "model.CommentCreateResponse": {
-            "type": "object",
-            "properties": {
-                "created_at": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "string"
-                },
-                "message": {
-                    "type": "string"
-                },
-                "photo_id": {
-                    "type": "string"
-                },
-                "user_id": {
-                    "type": "string"
-                }
-            }
-        },
-        "model.CommentResponse": {
-            "type": "object",
-            "properties": {
-                "created_at": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "string"
-                },
-                "message": {
-                    "type": "string"
-                },
-                "photo_id": {
-                    "type": "string"
-                },
-                "updated_at": {
-                    "type": "string"
-                },
-                "user_id": {
-                    "type": "string"
-                }
-            }
-        },
         "model.CommentUpdateRequest": {
             "type": "object",
             "properties": {
@@ -1066,57 +1014,13 @@ const docTemplate = `{
                 }
             }
         },
-        "model.CommentUpdateResponse": {
+        "model.Meta": {
             "type": "object",
             "properties": {
-                "created_at": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "string"
+                "code": {
+                    "type": "integer"
                 },
                 "message": {
-                    "type": "string"
-                },
-                "photo_id": {
-                    "type": "string"
-                },
-                "updated_at": {
-                    "type": "string"
-                },
-                "user_id": {
-                    "type": "string"
-                }
-            }
-        },
-        "model.DeleteCommentResponse": {
-            "type": "object",
-            "properties": {
-                "message": {
-                    "type": "string"
-                }
-            }
-        },
-        "model.DeletePhotoResponse": {
-            "type": "object",
-            "properties": {
-                "message": {
-                    "type": "string"
-                }
-            }
-        },
-        "model.DeleteSocialMediaResponse": {
-            "type": "object",
-            "properties": {
-                "message": {
-                    "type": "string"
-                }
-            }
-        },
-        "model.MyError": {
-            "type": "object",
-            "properties": {
-                "error": {
                     "type": "string"
                 }
             }
@@ -1135,55 +1039,6 @@ const docTemplate = `{
                 }
             }
         },
-        "model.PhotoCreateResponse": {
-            "type": "object",
-            "properties": {
-                "caption": {
-                    "type": "string"
-                },
-                "created_at": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "string"
-                },
-                "photo_url": {
-                    "type": "string"
-                },
-                "title": {
-                    "type": "string"
-                },
-                "user_id": {
-                    "type": "string"
-                }
-            }
-        },
-        "model.PhotoResponse": {
-            "type": "object",
-            "properties": {
-                "caption": {
-                    "type": "string"
-                },
-                "created_at": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "string"
-                },
-                "photo_url": {
-                    "type": "string"
-                },
-                "title": {
-                    "type": "string"
-                },
-                "updated_at": {
-                    "type": "string"
-                },
-                "user_id": {
-                    "type": "string"
-                }
-            }
-        },
         "model.PhotoUpdateRequest": {
             "type": "object",
             "properties": {
@@ -1198,29 +1053,23 @@ const docTemplate = `{
                 }
             }
         },
-        "model.PhotoUpdateResponse": {
+        "model.ResponseFailed": {
             "type": "object",
             "properties": {
-                "caption": {
+                "error": {
                     "type": "string"
                 },
-                "created_at": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "string"
-                },
-                "photo_url": {
-                    "type": "string"
-                },
-                "title": {
-                    "type": "string"
-                },
-                "updated_at": {
-                    "type": "string"
-                },
-                "user_id": {
-                    "type": "string"
+                "meta": {
+                    "$ref": "#/definitions/model.Meta"
+                }
+            }
+        },
+        "model.ResponseSuccess": {
+            "type": "object",
+            "properties": {
+                "data": {},
+                "meta": {
+                    "$ref": "#/definitions/model.Meta"
                 }
             }
         },
@@ -1231,49 +1080,6 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "social_media_url": {
-                    "type": "string"
-                }
-            }
-        },
-        "model.SocialMediaCreateResponse": {
-            "type": "object",
-            "properties": {
-                "created_at": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "string"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "social_media_url": {
-                    "type": "string"
-                },
-                "user_id": {
-                    "type": "string"
-                }
-            }
-        },
-        "model.SocialMediaResponse": {
-            "type": "object",
-            "properties": {
-                "created_at": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "string"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "social_media_url": {
-                    "type": "string"
-                },
-                "updated_at": {
-                    "type": "string"
-                },
-                "user_id": {
                     "type": "string"
                 }
             }
@@ -1289,29 +1095,6 @@ const docTemplate = `{
                 }
             }
         },
-        "model.SocialMediaUpdateResponse": {
-            "type": "object",
-            "properties": {
-                "created_at": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "string"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "social_media_url": {
-                    "type": "string"
-                },
-                "updated_at": {
-                    "type": "string"
-                },
-                "user_id": {
-                    "type": "string"
-                }
-            }
-        },
         "model.UserLoginRequest": {
             "type": "object",
             "properties": {
@@ -1319,14 +1102,6 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "username": {
-                    "type": "string"
-                }
-            }
-        },
-        "model.UserLoginResponse": {
-            "type": "object",
-            "properties": {
-                "token": {
                     "type": "string"
                 }
             }
@@ -1347,23 +1122,6 @@ const docTemplate = `{
                     "type": "string"
                 }
             }
-        },
-        "model.UserRegisterResponse": {
-            "type": "object",
-            "properties": {
-                "created_at": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "string"
-                },
-                "updated_at": {
-                    "type": "string"
-                },
-                "username": {
-                    "type": "string"
-                }
-            }
         }
     },
     "securityDefinitions": {
@@ -1378,9 +1136,9 @@ const docTemplate = `{
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
-	Host:             "localhost:8080",
-	BasePath:         "",
-	Schemes:          []string{"http"},
+	Host:             "https://mygram-api.up.railway.app",
+	BasePath:         "/api/v1",
+	Schemes:          []string{"https"},
 	Title:            "Mygram API",
 	Description:      "Final Project for Scalable Web Service with Golang - Batch 1, DTS-FGA.",
 	InfoInstanceName: "swagger",
