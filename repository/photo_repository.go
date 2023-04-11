@@ -65,9 +65,11 @@ func (pr *PhotoRepository) Update(updatePhoto model.Photo, id string) (model.Pho
 }
 
 func (pr *PhotoRepository) Delete(id string) error {
-	photo := model.Photo{}
+	photo := model.Photo{
+		ID: id,
+	}
 
-	tx := pr.db.Delete(&photo, "id = ?", id)
+	tx := pr.db.Select("Comments").Delete(&photo)
 	if tx.Error != nil {
 		return tx.Error
 	}
