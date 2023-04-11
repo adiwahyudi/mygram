@@ -27,9 +27,9 @@ func Routes(g *gin.Engine, db *gorm.DB) {
 	commentService := service.NewCommentService(commentRepository, photoRepository)
 	commentController := controller.NewCommentController(*commentService)
 
+	g.GET("", controller.BaseContoller)
 	base := g.Group("/api/v1")
 	{
-		base.GET("", controller.BaseContoller)
 		auth := base.Group("/auth")
 		{
 			auth.POST("/register", userController.Register)

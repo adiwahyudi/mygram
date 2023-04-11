@@ -1,6 +1,7 @@
 package service
 
 import (
+	"fmt"
 	"mygram/helper"
 	"mygram/model"
 	"mygram/repository"
@@ -36,6 +37,7 @@ func (sms *SocialMediaService) GetAll() ([]model.SocialMediaResponse, error) {
 		})
 	}
 
+	fmt.Println("Social Media Response ", socialMediaRespons)
 	return socialMediaRespons, nil
 }
 
