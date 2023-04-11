@@ -29,7 +29,6 @@ func NewSocialMediaRepository(db *gorm.DB) *SocialMediaRepository {
 func (smr *SocialMediaRepository) Get() ([]model.SocialMedia, error) {
 	socialMedia := make([]model.SocialMedia, 0)
 
-	// tx := smr.db.Model(&model.SocialMedia{}).Preload("CreditCards").Find(&socialMedia)
 	tx := smr.db.Find(&socialMedia)
 	return socialMedia, tx.Error
 }
