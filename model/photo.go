@@ -47,16 +47,6 @@ type PhotoUpdateResponse struct {
 }
 
 type PhotoResponse struct {
-	ID        string    `json:"id"`
-	UserID    string    `json:"user_id"`
-	Title     string    `json:"title"`
-	Caption   string    `json:"caption"`
-	PhotoURL  string    `json:"photo_url"`
-	CreatedAt time.Time `json:"created_at"`
-	UpdatedAt time.Time `json:"updated_at"`
-}
-
-type PhotoResponseBaru struct {
 	ID        string                   `json:"id"`
 	UserID    string                   `json:"user_id"`
 	Title     string                   `json:"title"`

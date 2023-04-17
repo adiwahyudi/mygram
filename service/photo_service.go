@@ -16,13 +16,13 @@ func NewPhotoService(photoRepository repository.IPhotoRepository) *PhotoService 
 	}
 }
 
-func (ps *PhotoService) GetAll() ([]model.PhotoResponseBaru, error) {
-	photosResponse := make([]model.PhotoResponseBaru, 0)
+func (ps *PhotoService) GetAll() ([]model.PhotoResponse, error) {
+	photosResponse := make([]model.PhotoResponse, 0)
 
 	res, err := ps.PhotoRepository.Get()
 
 	if err != nil {
-		return []model.PhotoResponseBaru{}, err
+		return []model.PhotoResponse{}, err
 	}
 
 	for _, val := range res {
@@ -36,7 +36,7 @@ func (ps *PhotoService) GetAll() ([]model.PhotoResponseBaru, error) {
 				UpdatedAt: comment.UpdatedAt,
 			})
 		}
-		photosResponse = append(photosResponse, model.PhotoResponseBaru{
+		photosResponse = append(photosResponse, model.PhotoResponse{
 			ID:        val.ID,
 			UserID:    val.UserID,
 			Title:     val.Title,
@@ -58,12 +58,24 @@ func (ps *PhotoService) GetById(id string) (model.PhotoResponse, error) {
 		return model.PhotoResponse{}, err
 	}
 
+	var commentResponse []model.CommentInPhotoResponse
+	for _, comment := range photo.Comments {
+		commentResponse = append(commentResponse, model.CommentInPhotoResponse{
+			ID:        comment.ID,
+			UserID:    comment.UserID,
+			Message:   comment.Message,
+			CreatedAt: comment.CreatedAt,
+			UpdatedAt: comment.UpdatedAt,
+		})
+	}
+
 	return model.PhotoResponse{
 		ID:        photo.ID,
 		UserID:    photo.UserID,
 		Title:     photo.Title,
 		Caption:   photo.Caption,
 		PhotoURL:  photo.PhotoURL,
+		Comments:  commentResponse,
 		CreatedAt: photo.CreatedAt,
 		UpdatedAt: photo.UpdatedAt,
 	}, nil

@@ -37,9 +37,11 @@ func (pr *PhotoRepository) Get() ([]model.Photo, error) {
 }
 
 func (pr *PhotoRepository) GetOne(id string) (model.Photo, error) {
-	photo := model.Photo{}
+	photo := model.Photo{
+		ID: id,
+	}
 
-	tx := pr.db.First(&photo, "id = ?", id)
+	tx := pr.db.Preload("Comments").First(&photo)
 	if errors.Is(tx.Error, gorm.ErrRecordNotFound) {
 		return model.Photo{}, model.ErrorNotFound
 	}
