@@ -418,6 +418,46 @@ const docTemplate = `{
                 }
             }
         },
+        "/mygram": {
+            "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "description": "Get details for user.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "MyGram",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.ResponseSuccess"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/model.ResponseFailed"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/model.ResponseFailed"
+                        }
+                    }
+                }
+            }
+        },
         "/photo": {
             "get": {
                 "security": [
@@ -1136,9 +1176,9 @@ const docTemplate = `{
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
-	Host:             "https://mygram-api.up.railway.app",
+	Host:             "localhost:8080",
 	BasePath:         "/api/v1",
-	Schemes:          []string{"https"},
+	Schemes:          []string{"http"},
 	Title:            "Mygram API",
 	Description:      "Final Project for Scalable Web Service with Golang - Batch 1, DTS-FGA.",
 	InfoInstanceName: "swagger",

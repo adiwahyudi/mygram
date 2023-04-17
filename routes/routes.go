@@ -30,6 +30,7 @@ func Routes(g *gin.Engine, db *gorm.DB) {
 	g.GET("", controller.BaseContoller)
 	base := g.Group("/api/v1")
 	{
+		base.GET("/mygram", middleware.AuthMiddleware, userController.MyGram)
 		auth := base.Group("/auth")
 		{
 			auth.POST("/register", userController.Register)

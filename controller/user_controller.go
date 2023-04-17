@@ -182,3 +182,50 @@ func (uc *UserController) Login(ctx *gin.Context) {
 	return
 
 }
+
+// MyGram godoc
+//
+//	@Summary		MyGram
+//	@Description	Get details for user.
+//	@Tags			User
+//	@Accept			json
+//	@Produce		json
+//	@Success		200		{object}	model.ResponseSuccess
+//	@Failure		401		{object}	model.ResponseFailed
+//	@Failure		500		{object}	model.ResponseFailed
+//	@Security		Bearer
+//	@Router			/mygram [get]
+func (uc *UserController) MyGram(ctx *gin.Context) {
+	userId, isExist := ctx.Get("user_id")
+	if !isExist {
+		ctx.AbortWithStatusJSON(http.StatusInternalServerError, model.ResponseFailed{
+			Meta: model.Meta{
+				Code:    http.StatusInternalServerError,
+				Message: http.StatusText(http.StatusInternalServerError),
+			},
+			Error: model.ErrorInvalidToken.Err,
+		})
+		return
+	}
+
+	res, err := uc.UserService.MyGram(userId.(string))
+
+	if err != nil {
+		ctx.AbortWithStatusJSON(http.StatusInternalServerError, model.ResponseFailed{
+			Meta: model.Meta{
+				Code:    http.StatusInternalServerError,
+				Message: http.StatusText(http.StatusInternalServerError),
+			},
+			Error: err.Error(),
+		})
+		return
+	}
+	ctx.JSON(http.StatusOK, model.ResponseSuccess{
+		Meta: model.Meta{
+			Code:    http.StatusOK,
+			Message: http.StatusText(http.StatusOK),
+		},
+		Data: res,
+	})
+	return
+}

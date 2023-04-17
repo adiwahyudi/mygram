@@ -16,22 +16,33 @@ func NewPhotoService(photoRepository repository.IPhotoRepository) *PhotoService 
 	}
 }
 
-func (ps *PhotoService) GetAll() ([]model.PhotoResponse, error) {
-	photosResponse := make([]model.PhotoResponse, 0)
+func (ps *PhotoService) GetAll() ([]model.PhotoResponseBaru, error) {
+	photosResponse := make([]model.PhotoResponseBaru, 0)
 
 	res, err := ps.PhotoRepository.Get()
 
 	if err != nil {
-		return []model.PhotoResponse{}, err
+		return []model.PhotoResponseBaru{}, err
 	}
 
 	for _, val := range res {
-		photosResponse = append(photosResponse, model.PhotoResponse{
+		commentResponse := make([]model.CommentInPhotoResponse, 0)
+		for _, comment := range val.Comments {
+			commentResponse = append(commentResponse, model.CommentInPhotoResponse{
+				ID:        comment.ID,
+				UserID:    comment.UserID,
+				Message:   comment.Message,
+				CreatedAt: comment.CreatedAt,
+				UpdatedAt: comment.UpdatedAt,
+			})
+		}
+		photosResponse = append(photosResponse, model.PhotoResponseBaru{
 			ID:        val.ID,
 			UserID:    val.UserID,
 			Title:     val.Title,
 			Caption:   val.Caption,
 			PhotoURL:  val.PhotoURL,
+			Comments:  commentResponse,
 			CreatedAt: val.CreatedAt,
 			UpdatedAt: val.UpdatedAt,
 		})
@@ -44,10 +55,7 @@ func (ps *PhotoService) GetById(id string) (model.PhotoResponse, error) {
 	photo, err := ps.PhotoRepository.GetOne(id)
 
 	if err != nil {
-		if err != model.ErrorNotFound {
-			return model.PhotoResponse{}, err
-		}
-		return model.PhotoResponse{}, model.ErrorNotFound
+		return model.PhotoResponse{}, err
 	}
 
 	return model.PhotoResponse{
@@ -73,9 +81,6 @@ func (ps *PhotoService) Add(request model.PhotoCreateRequest, userId string) (mo
 
 	res, err := ps.PhotoRepository.Save(photo)
 	if err != nil {
-		if err != model.ErrorNotFound {
-			return model.PhotoCreateResponse{}, model.ErrorNotFound
-		}
 		return model.PhotoCreateResponse{}, err
 	}
 

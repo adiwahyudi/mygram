@@ -69,3 +69,56 @@ func (us *UserService) Login(request model.UserLoginRequest) (model.UserLoginRes
 		Token: token,
 	}, nil
 }
+
+func (us *UserService) MyGram(id string) (model.UserGramResponse, error) {
+	var photoResponse []model.ListPhotoResponse
+	var socialMediaResponse []model.ListSocialMediasResponse
+	var commentResponse []model.ListCommentResponse
+
+	result, err := us.UserRepository.GetDetailUser(id)
+
+	if err != nil {
+		return model.UserGramResponse{}, err
+	}
+
+	for _, val := range result.Photos {
+		photoResponse = append(photoResponse, model.ListPhotoResponse{
+			ID:        val.ID,
+			Title:     val.Title,
+			Caption:   val.Caption,
+			PhotoURL:  val.PhotoURL,
+			CreatedAt: val.CreatedAt,
+			UpdatedAt: val.UpdatedAt,
+		})
+	}
+	for _, val := range result.SocialMedias {
+		socialMediaResponse = append(socialMediaResponse, model.ListSocialMediasResponse{
+			ID:             val.ID,
+			Name:           val.Name,
+			SocialMediaURL: val.SocialMediaURL,
+			CreatedAt:      val.CreatedAt,
+			UpdatedAt:      val.UpdatedAt,
+		})
+	}
+	for _, val := range result.Comments {
+		commentResponse = append(commentResponse, model.ListCommentResponse{
+			ID:        val.ID,
+			Message:   val.Message,
+			CreatedAt: val.CreatedAt,
+			UpdatedAt: val.UpdatedAt,
+		})
+	}
+
+	return model.UserGramResponse{
+		ID:           result.ID,
+		Email:        result.Email,
+		Username:     result.Username,
+		Age:          result.Age,
+		Photos:       photoResponse,
+		Comments:     commentResponse,
+		SocialMedias: socialMediaResponse,
+		CreatedAt:    result.CreatedAt,
+		UpdatedAt:    result.UpdatedAt,
+	}, nil
+
+}

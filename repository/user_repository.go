@@ -10,6 +10,7 @@ import (
 type IUserRepository interface {
 	Save(newUser model.User) (model.User, error)
 	GetByUsername(username string) (model.User, error)
+	GetDetailUser(id string) (model.User, error)
 }
 type UserRepository struct {
 	db *gorm.DB
@@ -32,6 +33,16 @@ func (ur *UserRepository) Save(newUser model.User) (model.User, error) {
 func (ur *UserRepository) GetByUsername(username string) (model.User, error) {
 	user := model.User{}
 	tx := ur.db.First(&user, "username = ?", username)
+
+	return user, tx.Error
+}
+
+func (ur *UserRepository) GetDetailUser(id string) (model.User, error) {
+	user := model.User{
+		ID: id,
+	}
+
+	tx := ur.db.Preload("Photos").Preload("Comments").Preload("SocialMedias").Find(&user)
 
 	return user, tx.Error
 }

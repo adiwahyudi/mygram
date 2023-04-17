@@ -50,3 +50,25 @@ type CommentUpdateResponse struct {
 type DeleteCommentResponse struct {
 	Message string `json:"message"`
 }
+
+func ToCommentResponse(comment Comment) CommentResponse {
+	return CommentResponse{
+		ID:        comment.ID,
+		UserID:    comment.ID,
+		PhotoID:   comment.PhotoID,
+		Message:   comment.Message,
+		CreatedAt: comment.CreatedAt,
+		UpdatedAt: comment.UpdatedAt,
+	}
+}
+
+func ToCommentUpdateResponse(comment Comment) CommentUpdateResponse {
+	return CommentUpdateResponse{
+		ID:        comment.ID,
+		UserID:    comment.UserID,
+		PhotoID:   comment.PhotoID,
+		Message:   comment.Message,
+		CreatedAt: comment.CreatedAt,
+		UpdatedAt: comment.UpdatedAt,
+	}
+}

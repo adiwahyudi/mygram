@@ -56,6 +56,25 @@ type PhotoResponse struct {
 	UpdatedAt time.Time `json:"updated_at"`
 }
 
+type PhotoResponseBaru struct {
+	ID        string                   `json:"id"`
+	UserID    string                   `json:"user_id"`
+	Title     string                   `json:"title"`
+	Caption   string                   `json:"caption"`
+	PhotoURL  string                   `json:"photo_url"`
+	Comments  []CommentInPhotoResponse `json:"comments"`
+	CreatedAt time.Time                `json:"created_at"`
+	UpdatedAt time.Time                `json:"updated_at"`
+}
+
+type CommentInPhotoResponse struct {
+	ID        string    `json:"id"`
+	UserID    string    `json:"user_id"`
+	Message   string    `json:"message"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
+}
+
 type DeletePhotoResponse struct {
 	Message string `json:"message"`
 }

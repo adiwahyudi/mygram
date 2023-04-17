@@ -52,7 +52,7 @@ func TestUserService_Add(t *testing.T) {
 							Password: "adiwahyudi",
 							Age:      22,
 						}, nil,
-					)
+					).Once()
 			},
 			wantErr: false,
 		},
@@ -112,7 +112,7 @@ func TestUserService_Login(t *testing.T) {
 							Password: hashPassword,
 							Age:      22,
 						}, nil,
-					)
+					).Once()
 			},
 			wantErr: false,
 		},
@@ -138,7 +138,7 @@ func TestUserService_Login(t *testing.T) {
 							Password: hashPassword,
 							Age:      22,
 						}, nil,
-					)
+					).Once()
 			},
 			wantErr: true,
 		},
@@ -153,6 +153,63 @@ func TestUserService_Login(t *testing.T) {
 			}
 			if !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("UserService.Login() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestUserService_MyGram(t *testing.T) {
+	userRepository := mocks.NewIUserRepository(t)
+
+	type args struct {
+		id string
+	}
+	tests := []struct {
+		name     string
+		us       *UserService
+		args     args
+		want     model.UserGramResponse
+		mockFunc func()
+		wantErr  bool
+	}{
+		// TODO: Add test cases.
+		{
+			name: "Case #1 - Success Get Data",
+			us: &UserService{
+				UserRepository: userRepository,
+			},
+			args: args{
+				id: "1",
+			},
+			want: model.UserGramResponse{
+				ID:       "1",
+				Username: "adiwahyudi",
+				Email:    "adiwahyudi@mail.com",
+				Age:      22,
+			},
+			mockFunc: func() {
+				userRepository.On("GetDetailUser", mock.AnythingOfType("string")).Return(
+					model.User{
+						ID:       "1",
+						Username: "adiwahyudi",
+						Email:    "adiwahyudi@mail.com",
+						Age:      22,
+					}, nil,
+				).Once()
+			},
+			wantErr: false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			tt.mockFunc()
+			got, err := tt.us.MyGram(tt.args.id)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("UserService.MyGram() error = %+v, wantErr %+v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("UserService.MyGram() = %+v, want %+v", got, tt.want)
 			}
 		})
 	}
