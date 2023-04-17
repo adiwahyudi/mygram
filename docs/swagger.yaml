@@ -82,7 +82,7 @@ definitions:
       username:
         type: string
     type: object
-host: https://mygram-api.up.railway.app
+host: localhost:8080
 info:
   contact: {}
   description: Final Project for Scalable Web Service with Golang - Batch 1, DTS-FGA.
@@ -344,6 +344,31 @@ paths:
       summary: Create comment
       tags:
       - Comment
+  /mygram:
+    get:
+      consumes:
+      - application/json
+      description: Get details for user.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.ResponseSuccess'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/model.ResponseFailed'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/model.ResponseFailed'
+      security:
+      - Bearer: []
+      summary: MyGram
+      tags:
+      - User
   /photo:
     get:
       consumes:
@@ -717,7 +742,7 @@ paths:
 produces:
 - application/json
 schemes:
-- https
+- http
 securityDefinitions:
   Bearer:
     in: header

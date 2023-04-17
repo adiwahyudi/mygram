@@ -48,7 +48,7 @@ func (cs *CommentService) Add(request model.CommentCreateRequest, userId string,
 }
 
 func (cs *CommentService) GetAll() ([]model.CommentResponse, error) {
-	commentResponse := make([]model.CommentResponse, 0)
+	var commentResponse []model.CommentResponse
 
 	res, err := cs.CommentRepository.Get()
 
@@ -57,14 +57,7 @@ func (cs *CommentService) GetAll() ([]model.CommentResponse, error) {
 	}
 
 	for _, val := range res {
-		commentResponse = append(commentResponse, model.CommentResponse{
-			ID:        val.ID,
-			UserID:    val.UserID,
-			PhotoID:   val.PhotoID,
-			Message:   val.Message,
-			CreatedAt: val.CreatedAt,
-			UpdatedAt: val.UpdatedAt,
-		})
+		commentResponse = append(commentResponse, model.CommentResponse(val))
 	}
 
 	return commentResponse, nil
@@ -80,14 +73,7 @@ func (cs *CommentService) GetById(id string) (model.CommentResponse, error) {
 		return model.CommentResponse{}, err
 	}
 
-	return model.CommentResponse{
-		ID:        res.ID,
-		UserID:    res.UserID,
-		PhotoID:   res.PhotoID,
-		Message:   res.Message,
-		CreatedAt: res.CreatedAt,
-		UpdatedAt: res.UpdatedAt,
-	}, nil
+	return model.CommentResponse(res), nil
 }
 
 func (cs *CommentService) UpdateById(request model.CommentUpdateRequest, userId string, id string) (model.CommentUpdateResponse, error) {
@@ -113,14 +99,7 @@ func (cs *CommentService) UpdateById(request model.CommentUpdateRequest, userId 
 		return model.CommentUpdateResponse{}, err
 	}
 
-	return model.CommentUpdateResponse{
-		ID:        res.ID,
-		UserID:    res.UserID,
-		PhotoID:   res.PhotoID,
-		Message:   res.Message,
-		CreatedAt: res.CreatedAt,
-		UpdatedAt: res.UpdatedAt,
-	}, nil
+	return model.CommentUpdateResponse(res), nil
 
 }
 

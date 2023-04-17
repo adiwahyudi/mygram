@@ -38,3 +38,39 @@ type UserLoginRequest struct {
 type UserLoginResponse struct {
 	Token string `json:"token"`
 }
+
+type UserGramResponse struct {
+	ID           string                     `json:"id"`
+	Email        string                     `json:"email"`
+	Username     string                     `json:"username"`
+	Age          int                        `json:"age"`
+	Photos       []ListPhotoResponse        `json:"my_photos"`
+	Comments     []ListCommentResponse      `json:"my_comments"`
+	SocialMedias []ListSocialMediasResponse `json:"my_social_medias"`
+	CreatedAt    time.Time                  `json:"created_at"`
+	UpdatedAt    time.Time                  `json:"updated_at"`
+}
+
+type ListPhotoResponse struct {
+	ID        string    `json:"id"`
+	Title     string    `json:"title"`
+	Caption   string    `json:"caption"`
+	PhotoURL  string    `json:"photo_url"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
+}
+
+type ListSocialMediasResponse struct {
+	ID             string    `json:"id"`
+	Name           string    `json:"name"`
+	SocialMediaURL string    `json:"social_media_url"`
+	CreatedAt      time.Time `json:"created_at"`
+	UpdatedAt      time.Time `json:"updated_at"`
+}
+
+type ListCommentResponse struct {
+	ID        string    `json:"id"`
+	Message   string    `json:"message"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
+}

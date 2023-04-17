@@ -4,6 +4,8 @@ import (
 	"errors"
 	"mygram/model"
 
+	"fmt"
+
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
 )
@@ -29,14 +31,17 @@ func NewPhotoRepository(db *gorm.DB) *PhotoRepository {
 func (pr *PhotoRepository) Get() ([]model.Photo, error) {
 	photo := make([]model.Photo, 0)
 
-	tx := pr.db.Find(&photo)
+	tx := pr.db.Preload("Comments").Find(&photo)
+	fmt.Println(photo)
 	return photo, tx.Error
 }
 
 func (pr *PhotoRepository) GetOne(id string) (model.Photo, error) {
-	photo := model.Photo{}
+	photo := model.Photo{
+		ID: id,
+	}
 
-	tx := pr.db.First(&photo, "id = ?", id)
+	tx := pr.db.Preload("Comments").First(&photo)
 	if errors.Is(tx.Error, gorm.ErrRecordNotFound) {
 		return model.Photo{}, model.ErrorNotFound
 	}

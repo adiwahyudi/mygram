@@ -26,12 +26,23 @@ func (ps *PhotoService) GetAll() ([]model.PhotoResponse, error) {
 	}
 
 	for _, val := range res {
+		commentResponse := make([]model.CommentInPhotoResponse, 0)
+		for _, comment := range val.Comments {
+			commentResponse = append(commentResponse, model.CommentInPhotoResponse{
+				ID:        comment.ID,
+				UserID:    comment.UserID,
+				Message:   comment.Message,
+				CreatedAt: comment.CreatedAt,
+				UpdatedAt: comment.UpdatedAt,
+			})
+		}
 		photosResponse = append(photosResponse, model.PhotoResponse{
 			ID:        val.ID,
 			UserID:    val.UserID,
 			Title:     val.Title,
 			Caption:   val.Caption,
 			PhotoURL:  val.PhotoURL,
+			Comments:  commentResponse,
 			CreatedAt: val.CreatedAt,
 			UpdatedAt: val.UpdatedAt,
 		})
@@ -44,10 +55,18 @@ func (ps *PhotoService) GetById(id string) (model.PhotoResponse, error) {
 	photo, err := ps.PhotoRepository.GetOne(id)
 
 	if err != nil {
-		if err != model.ErrorNotFound {
-			return model.PhotoResponse{}, err
-		}
-		return model.PhotoResponse{}, model.ErrorNotFound
+		return model.PhotoResponse{}, err
+	}
+
+	var commentResponse []model.CommentInPhotoResponse
+	for _, comment := range photo.Comments {
+		commentResponse = append(commentResponse, model.CommentInPhotoResponse{
+			ID:        comment.ID,
+			UserID:    comment.UserID,
+			Message:   comment.Message,
+			CreatedAt: comment.CreatedAt,
+			UpdatedAt: comment.UpdatedAt,
+		})
 	}
 
 	return model.PhotoResponse{
@@ -56,6 +75,7 @@ func (ps *PhotoService) GetById(id string) (model.PhotoResponse, error) {
 		Title:     photo.Title,
 		Caption:   photo.Caption,
 		PhotoURL:  photo.PhotoURL,
+		Comments:  commentResponse,
 		CreatedAt: photo.CreatedAt,
 		UpdatedAt: photo.UpdatedAt,
 	}, nil
@@ -73,9 +93,6 @@ func (ps *PhotoService) Add(request model.PhotoCreateRequest, userId string) (mo
 
 	res, err := ps.PhotoRepository.Save(photo)
 	if err != nil {
-		if err != model.ErrorNotFound {
-			return model.PhotoCreateResponse{}, model.ErrorNotFound
-		}
 		return model.PhotoCreateResponse{}, err
 	}
 
